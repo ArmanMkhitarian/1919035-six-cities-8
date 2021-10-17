@@ -1,4 +1,4 @@
-import {useHistory} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {Offers} from '../../types/Offers';
 import FormSendComment from '../form-send-comment/form-send-comment';
 
@@ -7,9 +7,8 @@ type Settings = {
 }
 
 function Offer({offers}: Settings): JSX.Element {
-  const hist = useHistory();
-  const pathName = hist.location.pathname;
-  const selectOffer = offers.find((x) => x.id === pathName.substring(7, pathName.length).toString());
+  const { id } = useParams<{ id: string }>();
+  const selectOffer = offers.find((x) => x.id === id.replace(':','').trim());
   return (
     <div>
       <div style = {{display: 'none'}}>

@@ -5,20 +5,15 @@ import React from 'react';
 
 type Settings = {
   offer: Offer;
+  onActive: (id: string) => void;
 }
 
 function Card(props: Settings): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cursor, setCursor] = React.useState('');
   const history = useHistory();
-  const {offer} = props;
-  const onMouseOverHandler = (event: string) => {
-    setCursor(event);
-  };
-
+  const {offer, onActive} = props;
   return (
     <article className="cities__place-card place-card"
-      onMouseOver={() => onMouseOverHandler(offer.id)}
+      onMouseOver={() => (onActive) ? onActive(offer.id) : undefined}
       onClick={() => history.push(AppRoute.Offer.replace('id',offer.id.toString())) }
     >
       <div className="place-card__mark">
