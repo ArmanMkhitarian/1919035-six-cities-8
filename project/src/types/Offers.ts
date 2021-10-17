@@ -6,6 +6,10 @@ export type Offer = {
   rating: number
   bedrooms: number
   maxAdults: number
+  location: {
+    latitude: number
+    longitude: number
+  }
   name: string
   cardType: string
   inside: string[],

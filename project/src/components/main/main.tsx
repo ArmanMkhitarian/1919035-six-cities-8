@@ -1,5 +1,8 @@
 import {Offers} from '../../types/Offers';
 import CardList from '../card-list/card-list';
+import Map from '../map/map';
+import {CITY} from '../../mocks/city';
+import React from 'react';
 
 
 type MainSettings = {
@@ -8,6 +11,15 @@ type MainSettings = {
 }
 
 function Main({countOffer, offers}: MainSettings): JSX.Element {
+  const [selectedPointId, setSelectedPoint] = React.useState<string | null>(null);
+  const onListItemHover = (listItemName: string | null) => {
+    const currentPoint = offers.find((offer) =>
+      offer.id === listItemName,
+    );
+    if(currentPoint !== undefined){
+      setSelectedPoint(currentPoint.id);
+    }
+  };
   return (
     <section>
       <div style = {{display: 'none'}}>
@@ -117,10 +129,12 @@ function Main({countOffer, offers}: MainSettings): JSX.Element {
                     <li className="places__option" tabIndex={0}>Top rated first</li>
                   </ul>
                 </form>
-                <CardList offers = {offers}/>
+                <div>
+                  <CardList offers = {offers} onListItemHover={onListItemHover}/>
+                </div>
               </section>
               <div className="cities__right-section">
-                <section className="cities__map map"></section>
+                <Map className="cities__map map" city={CITY} offers={offers} selectedPointId = {selectedPointId}/>
               </div>
             </div>
           </div>
