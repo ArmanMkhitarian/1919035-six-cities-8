@@ -3,7 +3,7 @@ export enum AppRoute {
   Favorites ='/favorites',
   FavoritesEmpty = '/favorites-empty',
   Root = '/',
-  Property = '/offer:id',
+  Offer = '/offer:id',
   Main = '/main'
 }
 

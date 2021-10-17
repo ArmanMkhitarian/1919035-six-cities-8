@@ -1,26 +1,36 @@
-type CardSetting = {
-  image: string
-  price: number
-  rating: number
-  name: string
-  cardType: string
+import {Offer} from '../../types/Offers';
+import {useHistory} from 'react-router-dom';
+import {AppRoute} from '../../const';
+import React from 'react';
+
+type Settings = {
+  offer: Offer;
 }
 
-function Card(props: CardSetting): JSX.Element {
+function Card(props: Settings): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [cursor, setCursor] = React.useState('');
+  const history = useHistory();
+  const {offer} = props;
+  const onMouseOverHandler = (event: string) => {
+    setCursor(event);
+  };
+
   return (
-    <article className="cities__place-card place-card">
+    <article className="cities__place-card place-card"
+      onMouseOver={() => onMouseOverHandler(offer.id)}
+      onClick={() => history.push(AppRoute.Offer.replace('id',offer.id.toString())) }
+    >
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img className="place-card__image" src={props.image} width="260" height="200" alt="Place image"/>
-        </a>
+        <img className="place-card__image" src={offer.imageMain} width="260" height="200" alt="Place image"/>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{props.price}</b>
+            <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className="place-card__bookmark-button button" type="button">
@@ -31,13 +41,13 @@ function Card(props: CardSetting): JSX.Element {
           </button>
         </div>
         <div className="place-card__stars rating__stars">
-          <span style={{width: props.rating}}/>
+          <span style={{width: offer.rating}}/>
           <span className="visually-hidden">Rating</span>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{props.name}</a>
+          <a href={AppRoute.Offer.replace('id',offer.id.toString())}>{offer.name}</a>
         </h2>
-        <p className="place-card__type">{props.cardType}</p>
+        <p className="place-card__type">{offer.cardType}</p>
       </div>
     </article>
   );
