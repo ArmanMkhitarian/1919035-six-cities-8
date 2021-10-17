@@ -1,6 +1,17 @@
-function PropertyNotLogged(): JSX.Element {
+import {useHistory} from 'react-router-dom';
+import {Offers} from '../../types/Offers';
+import FormSendComment from '../form-send-comment/form-send-comment';
+
+type Settings = {
+  offers: Offers
+}
+
+function Offer({offers}: Settings): JSX.Element {
+  const hist = useHistory();
+  const pathName = hist.location.pathname;
+  const selectOffer = offers.find((x) => x.id === pathName.substring(7, pathName.length).toString());
   return (
-    <section>
+    <div>
       <div style = {{display: 'none'}}>
         <svg xmlns="http://www.w3.org/2000/svg">
           <symbol id="icon-arrow-select" viewBox="0 0 7 4">
@@ -30,7 +41,12 @@ function PropertyNotLogged(): JSX.Element {
                     <a className="header__nav-link header__nav-link--profile" href="#">
                       <div className="header__avatar-wrapper user__avatar-wrapper">
                       </div>
-                      <span className="header__login">Sign in</span>
+                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                    </a>
+                  </li>
+                  <li className="header__nav-item">
+                    <a className="header__nav-link" href="#">
+                      <span className="header__signout">Sign out</span>
                     </a>
                   </li>
                 </ul>
@@ -70,7 +86,7 @@ function PropertyNotLogged(): JSX.Element {
                 </div>
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    Beautiful &amp; luxurious studio at great location
+                    {selectOffer?.name}
                   </h1>
                   <button className="property__bookmark-button button" type="button">
                     <svg className="property__bookmark-icon" width="31" height="33">
@@ -88,17 +104,17 @@ function PropertyNotLogged(): JSX.Element {
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
-                    Apartment
+                    {selectOffer?.cardType}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    3 Bedrooms
+                    {selectOffer?.bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                    Max 4 adults
+                    Max {selectOffer?.maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
-                  <b className="property__price-value">&euro;120</b>
+                  <b className="property__price-value">&euro; {selectOffer?.price}</b>
                   <span className="property__price-text">&nbsp;night</span>
                 </div>
                 <div className="property__inside">
@@ -143,21 +159,14 @@ function PropertyNotLogged(): JSX.Element {
                       <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar"/>
                     </div>
                     <span className="property__user-name">
-                    Angelina
+                      {selectOffer?.hostName}
                     </span>
                     <span className="property__user-status">
                     Pro
                     </span>
                   </div>
                   <div className="property__description">
-                    <p className="property__text">
-                      A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The
-                      building is green and from 18th century.
-                    </p>
-                    <p className="property__text">
-                      An independent House, strategically located between Rembrand Square and National Opera, but where
-                      the bustle of the city comes to rest in this alley flowery and colorful.
-                    </p>
+                    {selectOffer?.description}
                   </div>
                 </div>
                 <section className="property__reviews reviews">
@@ -187,6 +196,7 @@ function PropertyNotLogged(): JSX.Element {
                       </div>
                     </li>
                   </ul>
+                  <FormSendComment/>
                 </section>
               </div>
             </div>
@@ -210,7 +220,7 @@ function PropertyNotLogged(): JSX.Element {
                       </div>
                       <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
                         <svg className="place-card__bookmark-icon" width="18" height="19">
-                          <use xlinkHref="#icon-bookmark"></use>
+                          <use xlinkHref="#icon-bookmark"/>
                         </svg>
                         <span className="visually-hidden">In bookmarks</span>
                       </button>
@@ -296,8 +306,9 @@ function PropertyNotLogged(): JSX.Element {
           </div>
         </main>
       </div>
-    </section>
+
+    </div>
   );
 }
 
-export default PropertyNotLogged;
+export default Offer;

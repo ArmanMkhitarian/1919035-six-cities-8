@@ -1,28 +1,30 @@
 import Main from '../main/main';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Login from '../login/login';
-import Property from '../property/property';
-import NotFound404 from '../notFound404/notFound404';
+import Offer from '../property/offer';
+import NotFound404 from '../not-found-404/not-found-404';
 import FavoritesEmpty from '../favorites/favorites-empty';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import Favorites from '../favorites/favorites';
-import PrivateRoute from '../privateRoute/privateRoute';
-
+import PrivateRoute from '../private-route/private-route';
+import {Offers} from '../../types/Offers';
+import React from 'react';
 
 type MainSettings = {
-  countOffer: number
+  countOffer: number;
+  offers: Offers;
 }
 
-function App(props: MainSettings): JSX.Element {
+function App({countOffer, offers}: MainSettings): JSX.Element {
   return (
     <section>
       <BrowserRouter>
         <Switch>
           <Route exact path={AppRoute.Main}>
-            <Main countOffer = {props.countOffer}/>
+            <Main countOffer = {countOffer} offers = {offers} />
           </Route>
           <Route exact path={AppRoute.Root}>
-            <Main countOffer = {props.countOffer}/>
+            <Main countOffer = {countOffer} offers = {offers}/>
           </Route>
           <Route exact path={AppRoute.Login}>
             <Login/>
@@ -30,15 +32,15 @@ function App(props: MainSettings): JSX.Element {
           <PrivateRoute
             exact
             path={AppRoute.Favorites}
-            render={() => <Favorites/>}
-            authorizationStatus = {AuthorizationStatus.NoAuth}
+            render={() => <Favorites offers = {offers}/>}
+            authorizationStatus = {AuthorizationStatus.Auth}
           >
           </PrivateRoute>
           <Route exact path={AppRoute.FavoritesEmpty}>
             <FavoritesEmpty/>
           </Route>
-          <Route exact path={AppRoute.Property}>
-            <Property/>
+          <Route exact path={AppRoute.Offer}>
+            <Offer offers = {offers}/>
           </Route>
           <Route
             render={() => (

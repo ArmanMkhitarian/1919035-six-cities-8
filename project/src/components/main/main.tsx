@@ -1,10 +1,13 @@
-import Card from '../card/card';
+import {Offers} from '../../types/Offers';
+import CardList from '../card-list/card-list';
+
 
 type MainSettings = {
-  countOffer: number
+  countOffer: number;
+  offers: Offers
 }
 
-function Main(props: MainSettings): JSX.Element {
+function Main({countOffer, offers}: MainSettings): JSX.Element {
   return (
     <section>
       <div style = {{display: 'none'}}>
@@ -98,7 +101,7 @@ function Main(props: MainSettings): JSX.Element {
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{props.countOffer} places to stay in Amsterdam</b>
+                <b className="places__found">{countOffer} places to stay in Amsterdam</b>
                 <form className="places__sorting" action="#" method="get">
                   <span className="places__sorting-caption">Sort by</span>
                   <span className="places__sorting-type" tabIndex={0}>
@@ -114,12 +117,8 @@ function Main(props: MainSettings): JSX.Element {
                     <li className="places__option" tabIndex={0}>Top rated first</li>
                   </ul>
                 </form>
-                <div className="cities__places-list places__list tabs__content">
-                  <Card image="img/apartment-01.jpg" price={120} rating={40} name="Beautiful &amp; luxurious apartment at great location" cardType="Apartment"/>;
-                  <Card image="img/room.jpg" price={80} rating={60} name="Wood and stone place" cardType="Private room"/>;
-                  <Card image="img/apartment-02.jpg" price={132} rating={80} name="Canal View Prinsengracht" cardType="Apartment"/>;
-                  <Card image="img/apartment-03.jpg" price={180} rating={50} name="Nice, cozy, warm big bed apartment" cardType="Apartment"/>;
-                  <Card image="img/room.jpg" price={80} rating={60} name="Wood and stone place" cardType="Private room"/>;
+                <div>
+                  <CardList offers = {offers}/>
                 </div>
               </section>
               <div className="cities__right-section">
