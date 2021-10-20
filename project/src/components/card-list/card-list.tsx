@@ -13,6 +13,7 @@ function CardList(props: Settings): JSX.Element{
   onListItemHover(ActiveOfferId);
   return (
     <div className='cities__places-list places__list tabs__content'>
+      {ActiveOfferId}
       {
         offers.map((offer, id) => {
           const keyValue = `${id}-${offer.name}`;
