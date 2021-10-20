@@ -17,9 +17,11 @@ function Card(props: Settings): JSX.Element {
       onMouseLeave={() =>(onActive) ? onActive(null) : undefined}
       onClick={() => history.push(AppRoute.Offer.replace('id',offer.id.toString())) }
     >
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
+      {offer.isPremium && (
+        <div className="place-card__mark">
+          <span>Premium</span>
+        </div>
+      )}
       <div className="cities__image-wrapper place-card__image-wrapper">
         <img className="place-card__image" src={offer.imageMain} width="260" height="200" alt="Place image"/>
       </div>

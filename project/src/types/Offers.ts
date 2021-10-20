@@ -11,6 +11,8 @@ export type Offer = {
     longitude: number
   }
   name: string
+  isFavorite: boolean,
+  isPremium: boolean,
   cardType: string
   inside: string[],
   hostName: string,
@@ -19,6 +21,7 @@ export type Offer = {
 };
 
 export type Review = {
+  id: string,
   name: string,
   avatar: string,
   reviewText: string,
@@ -26,4 +29,5 @@ export type Review = {
   date: string
 };
 
+export type Reviews = Review[];
 export type Offers = Offer[];
