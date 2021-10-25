@@ -3,6 +3,14 @@ import {Offer} from '../types/Offers';
 export const offers: Offer[] = [
   {
     id: '1',
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10,
+      },
+      name: 'Amsterdam',
+    },
     imageMain: 'img/apartment-01.jpg',
     image: ['img/room.jpg','img/apartment-01.jpg','img/apartment-02.jpg','img/apartment-03.jpg','img/studio-01.jpg','img/apartment-01.jpg'],
     price: 120,
@@ -38,6 +46,14 @@ export const offers: Offer[] = [
   },
   {
     id: '2',
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10,
+      },
+      name: 'Amsterdam',
+    },
     imageMain: 'img/room.jpg',
     image: ['img/room.jpg','img/apartment-01.jpg','img/apartment-02.jpg','img/apartment-03.jpg','img/studio-01.jpg','img/apartment-01.jpg'],
     price: 100,
@@ -66,6 +82,14 @@ export const offers: Offer[] = [
   },
   {
     id: '3',
+    city: {
+      location: {
+        latitude: 52.370216,
+        longitude: 4.895168,
+        zoom: 10,
+      },
+      name: 'Amsterdam',
+    },
     imageMain: 'img/apartment-02.jpg',
     image: ['img/room.jpg','img/apartment-01.jpg','img/apartment-02.jpg','img/apartment-03.jpg','img/studio-01.jpg','img/apartment-01.jpg'],
     price: 150,
@@ -94,6 +118,14 @@ export const offers: Offer[] = [
   },
   {
     id: '4',
+    city: {
+      location: {
+        latitude: 48.8500,
+        longitude: 2.3485,
+        zoom: 10,
+      },
+      name: 'Paris',
+    },
     imageMain: 'img/apartment-03.jpg',
     image: ['img/room.jpg','img/apartment-01.jpg','img/apartment-02.jpg','img/apartment-03.jpg','img/studio-01.jpg','img/apartment-01.jpg'],
     price: 160,
@@ -101,8 +133,8 @@ export const offers: Offer[] = [
     bedrooms: 4,
     maxAdults: 6,
     location: {
-      latitude: 52.3809553943508,
-      longitude: 4.939309666406198,
+      latitude: 48.8500,
+      longitude: 2.3485,
     },
     name: 'Nice, cozy, warm big bed apartment',
     isPremium: true,

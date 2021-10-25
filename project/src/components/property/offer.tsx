@@ -35,7 +35,7 @@ function Offer({offers}: Settings): JSX.Element {
           <div className="container">
             <div className="header__wrapper">
               <div className="header__left">
-                <a className="header__logo-link" href="main.html">
+                <a className="header__logo-link" href="/main">
                   <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
                 </a>
               </div>
@@ -179,7 +179,7 @@ function Offer({offers}: Settings): JSX.Element {
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={CITY} offers={offers.slice(0,3)} selectedPointId = {null}/>
+            <Map className="cities__map map" city={CITY.find((city)=> city.name === 'Amsterdam')} offers={offers.slice(0,3)} selectedPointId = {null}/>
           </section>
           <div className="container">
             <section className="near-places places">

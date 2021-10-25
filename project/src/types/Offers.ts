@@ -1,5 +1,8 @@
+import {City} from './types';
+
 export type Offer = {
   id: string
+  city: City
   imageMain: string
   image: string[]
   price: number

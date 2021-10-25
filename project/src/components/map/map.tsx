@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import useMap from '../../hooks/use-map';
 import {City} from '../../types/types';
-import leaflet from 'leaflet';
+import leaflet, {Marker} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {Offers} from '../../types/Offers';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const';
@@ -9,7 +9,7 @@ import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const';
 
 type Setting = {
   className: string
-  city: City
+  city: City | undefined
   offers: Offers
   selectedPointId: string | null
 }
@@ -31,19 +31,32 @@ function Map({city, className, offers, selectedPointId }: Setting) {
   });
 
   useEffect(() => {
+    let markers: Marker[] = [];
     if (map) {
-      offers.forEach((offer) => {
-        leaflet
-          .marker({
-            lat: offer.location.latitude,
-            lng: offer.location.longitude,
-          }, {
-            icon: (offer.id === selectedPointId) ? currentCustomIcon : defaultCustomIcon,
-          })
-          .addTo(map);
+      markers = offers.map((offer) => {
+        const marker = new Marker({
+          lat: offer.location.latitude,
+          lng: offer.location.longitude,
+        });
+
+        marker
+          .setIcon(
+            selectedPointId !== undefined && offer.id === selectedPointId
+              ? currentCustomIcon
+              : defaultCustomIcon,
+          );
+        marker.addTo(map);
+        return marker;
       });
     }
+    return () => markers.forEach((marker) => marker.remove());
   }, [map, offers, selectedPointId]);
+
+  useEffect(() => {
+    if (map && city !== undefined) {
+      map.flyTo([city.location.latitude, city.location.longitude], city?.location.zoom);
+    }
+  }, [city,map]);
 
   return (
     <div className={className}

@@ -7,24 +7,33 @@ import FavoritesEmpty from '../favorites/favorites-empty';
 import {AppRoute, AuthorizationStatus} from '../../const';
 import Favorites from '../favorites/favorites';
 import PrivateRoute from '../private-route/private-route';
-import {Offers} from '../../types/Offers';
 import React from 'react';
+import {cities} from '../../const';
+import {State} from '../../types/state';
+import {connect, ConnectedProps} from 'react-redux';
 
-type MainSettings = {
-  countOffer: number;
-  offers: Offers;
-}
+const mapStateToProps = ({ currentCity, offers }: State) => ({
+  currentCity,
+  offers,
+});
 
-function App({countOffer, offers}: MainSettings): JSX.Element {
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux;
+
+function App(props: ConnectedComponentProps): JSX.Element {
+  const {offers, currentCity} = props;
+  const offersFilter = offers.filter((offer) => offer.city.name === currentCity);
   return (
     <section>
       <BrowserRouter>
         <Switch>
           <Route exact path={AppRoute.Main}>
-            <Main countOffer = {countOffer} offers = {offers} />
+            <Main currentCity = {currentCity} cities={cities} countOffer = {offersFilter.length} offers = {offersFilter} />
           </Route>
           <Route exact path={AppRoute.Root}>
-            <Main countOffer = {countOffer} offers = {offers}/>
+            <Main currentCity = {currentCity} cities={cities} countOffer = {offersFilter.length} offers = {offersFilter}/>
           </Route>
           <Route exact path={AppRoute.Login}>
             <Login/>
@@ -53,4 +62,5 @@ function App({countOffer, offers}: MainSettings): JSX.Element {
   );
 }
 
-export default App;
+export { App };
+export default connector(App);
