@@ -1,7 +1,7 @@
 import React from 'react';
 import {State} from '../../types/state';
 import {Dispatch} from '@reduxjs/toolkit';
-import {Actions, changeCity} from '../../store/action';
+import {Actions, changeCity, SwitchCityAction, SwitchSortAction} from '../../store/action';
 import {connect, ConnectedProps} from 'react-redux';
 import cn from 'classnames';
 
@@ -16,7 +16,7 @@ const mapStateToProps = ({ currentCity, offers }: State) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onChangeCity(city: string) {
-    dispatch(changeCity(city));
+    dispatch(changeCity(city) as SwitchCityAction | SwitchSortAction);
   },
 });
 
