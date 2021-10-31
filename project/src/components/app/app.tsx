@@ -12,6 +12,7 @@ import {cities} from '../../const';
 import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
 import {Offers} from '../../types/Offers';
+import Loading from '../loading/loading';
 
 
 const getOffersSorted = (currentSortType: string, offers: Offers) => {
@@ -31,10 +32,11 @@ const getOffersSorted = (currentSortType: string, offers: Offers) => {
   }
 };
 
-const mapStateToProps = ({ currentCity, offers, currentSortType }: State) => ({
+const mapStateToProps = ({ currentCity, offers, currentSortType, isDataLoaded }: State) => ({
   currentCity,
   offers,
   currentSortType,
+  isDataLoaded,
 });
 
 const connector = connect(mapStateToProps);
@@ -43,9 +45,14 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux;
 
 function App(props: ConnectedComponentProps): JSX.Element {
-  const {offers, currentCity, currentSortType} = props;
+  const {offers, currentCity, currentSortType, isDataLoaded} = props;
   const offersFilter = offers.filter((offer) => offer.city.name === currentCity);
   const offersSorted = getOffersSorted(currentSortType, offersFilter);
+  if (!isDataLoaded) {
+    return (
+      <Loading/>
+    );
+  }
   return (
     <section>
       <BrowserRouter>

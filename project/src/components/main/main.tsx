@@ -3,7 +3,6 @@ import CardList from '../card-list/card-list';
 import Map from '../map/map';
 import React from 'react';
 import CityList from '../city-list/city-list';
-import {CITY} from '../../mocks/city';
 import Sort from '../sort/sort';
 
 type MainSettings = {
@@ -87,7 +86,7 @@ function Main({countOffer, offers, cities, currentCity}: MainSettings): JSX.Elem
                 </div>
               </section>
               <div className="cities__right-section">
-                <Map className="cities__map map" city={CITY.find((city) => city.name === currentCity)} offers={offers} selectedPointId = {selectedPointId}/>
+                <Map className="cities__map map" city={offers[0].city} offers={offers} selectedPointId = {selectedPointId}/>
               </div>
             </div>
           </div>

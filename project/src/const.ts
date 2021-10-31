@@ -27,3 +27,10 @@ export enum SortType {
   PriceDecrease = 'Price: high to low',
   TopRatedFirst = 'Top rated first'
 }
+
+export enum APIRoute {
+  Offers = '/hotels',
+  Favorite = '/favorite',
+  Login = '/login',
+  Logout = '/logout',
+}

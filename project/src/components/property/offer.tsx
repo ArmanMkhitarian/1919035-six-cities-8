@@ -1,9 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {Offers} from '../../types/Offers';
 import FormSendComment from '../form-send-comment/form-send-comment';
-import ReviewList from '../review-list/review-list';
 import Map from '../map/map';
-import {CITY} from '../../mocks/city';
 import React from 'react';
 import CardList from '../card-list/card-list';
 
@@ -90,7 +88,7 @@ function Offer({offers}: Settings): JSX.Element {
                 </div>
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {selectOffer?.name}
+                    {selectOffer?.title}
                   </h1>
                   <button className="property__bookmark-button button" type="button">
                     <svg className="property__bookmark-icon" width="31" height="33">
@@ -163,7 +161,7 @@ function Offer({offers}: Settings): JSX.Element {
                       <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar"/>
                     </div>
                     <span className="property__user-name">
-                      {selectOffer?.hostName}
+                      {selectOffer?.host.name}
                     </span>
                     <span className="property__user-status">
                     Pro
@@ -174,12 +172,11 @@ function Offer({offers}: Settings): JSX.Element {
                   </div>
                 </div>
                 <section className="property__reviews reviews">
-                  <ReviewList reviews={selectOffer?.reviews} reviewsCount={selectOffer?.reviews.length}/>
                   <FormSendComment/>
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={CITY.find((city)=> city.name === 'Amsterdam')} offers={offers.slice(0,3)} selectedPointId = {null}/>
+            <Map className="cities__map map" city={offers[0].city} offers={offers.slice(0,3)} selectedPointId = {null}/>
           </section>
           <div className="container">
             <section className="near-places places">

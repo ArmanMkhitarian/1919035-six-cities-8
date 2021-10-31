@@ -23,7 +23,7 @@ function Card(props: Settings): JSX.Element {
         </div>
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <img className="place-card__image" src={offer.imageMain} width="260" height="200" alt="Place image"/>
+        <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image"/>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -39,11 +39,11 @@ function Card(props: Settings): JSX.Element {
           </button>
         </div>
         <div className="place-card__stars rating__stars">
-          <span style={{width: offer.rating}}/>
+          <span style={{width: offer.rating*20}}/>
           <span className="visually-hidden">Rating</span>
         </div>
         <h2 className="place-card__name">
-          <a href={AppRoute.Offer.replace('id',offer.id.toString())}>{offer.name}</a>
+          <a href={AppRoute.Offer.replace('id',offer.id.toString())}>{offer.title}</a>
         </h2>
         <p className="place-card__type">{offer.cardType}</p>
       </div>

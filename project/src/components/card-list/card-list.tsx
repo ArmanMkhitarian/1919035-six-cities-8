@@ -15,7 +15,7 @@ function CardList(props: Settings): JSX.Element{
     <div className='cities__places-list places__list tabs__content'>
       {
         offers.map((offer, id) => {
-          const keyValue = `${id}-${offer.name}`;
+          const keyValue = `${id}-${offer.title}`;
           return(
             <div key={keyValue}>
               <Card offer = {offer} onActive ={setActiveOfferId}/>

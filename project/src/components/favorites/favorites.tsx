@@ -68,7 +68,7 @@ function Favorites({offers}: Settings): JSX.Element {
                   <div className="favorites__places">
                     {
                       offers.map((offer, id) => {
-                        const keyValue = `${id}-${offer.name}`;
+                        const keyValue = `${id}-${offer.title}`;
                         return(
                           <article className="favorites__card place-card" key={keyValue}>
                             <FavoritesCard offer = {offer}/>

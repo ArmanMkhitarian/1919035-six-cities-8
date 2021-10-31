@@ -1,12 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import {createStore} from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
+import {applyMiddleware, createStore} from '@reduxjs/toolkit';
 import {reducer} from './store/reduser';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {Provider} from 'react-redux';
+import {createAPI} from './services/api';
+import {requireAuthorization, ThunkAppDispatch} from './store/action';
+import {AuthorizationStatus} from './const';
+import {checkAuthAction, fetchOffersAction} from './store/api-actions';
 
-const store = createStore(reducer, composeWithDevTools());
+const api = createAPI(
+  () => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
+);
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(applyMiddleware(thunk.withExtraArgument(api))),
+);
+
+(store.dispatch as ThunkAppDispatch)(fetchOffersAction());
+(store.dispatch as ThunkAppDispatch)(checkAuthAction());
 
 ReactDOM.render(
   <React.StrictMode>
