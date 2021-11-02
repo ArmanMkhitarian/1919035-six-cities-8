@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {SortType} from '../../const';
 import {State} from '../../types/state';
 import {Dispatch} from '@reduxjs/toolkit';
-import {Actions, changeSort, SwitchSortAction} from '../../store/action';
+import {Actions, changeSort} from '../../store/action';
 import {connect, ConnectedProps} from 'react-redux';
 
 const mapStateToProps = ({currentSortType}: State) => ({
@@ -11,7 +11,7 @@ const mapStateToProps = ({currentSortType}: State) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onSortTypeChange: function (sortType: SortType) {
-    dispatch(changeSort(sortType) as SwitchSortAction);
+    dispatch(changeSort(sortType));
   },
 });
 const connector = connect(mapStateToProps, mapDispatchToProps);

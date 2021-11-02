@@ -7,6 +7,7 @@ type State = {
   currentSortType: SortType;
   authorizationStatus: AuthorizationStatus,
   isDataLoaded: boolean,
+  currentLogin: string | null,
 };
 
 export type {State};

@@ -9,7 +9,8 @@ enum ActionType {
   SwitchSort = 'sort/switchSort',
   RequireAuthorization = 'user/requireAuthorization',
   RequireLogout = 'user/requireLogout',
-  OffersLoad = 'data/offersLoad'
+  OffersLoad = 'data/offersLoad',
+  GetCurrentLogin = 'user/getCurrentLogin'
 }
 
 type SwitchCityAction = {
@@ -36,36 +37,45 @@ type OffersLoad = {
   payload: Offers,
 }
 
-export const changeCity = (city: string) => ({
+type GetCurrentLogin = {
+  type: ActionType.GetCurrentLogin,
+  payload: string,
+}
+
+export const changeCity = (city: string) : SwitchCityAction => ({
   type: ActionType.SwitchCity,
   payload: city,
 });
 
-export const changeSort = (sort: SortType) => ({
+export const changeSort = (sort: SortType) : SwitchSortAction => ({
   type: ActionType.SwitchSort,
   payload: sort,
 });
 
-export const offersLoad = (offers: Offers) => ({
+export const offersLoad = (offers: Offers) : OffersLoad => ({
   type: ActionType.OffersLoad,
   payload: offers,
 });
 
-export const requireAuthorization = (authStatus: AuthorizationStatus) => ({
+export const requireAuthorization = (authStatus: AuthorizationStatus) : RequireAuthorization => ({
   type: ActionType.RequireAuthorization,
   payload: authStatus,
 });
 
-export const requireLogout = () => ({
+export const requireLogout = () : RequireLogout => ({
   type: ActionType.RequireLogout,
 });
 
+export const getCurrentLogin = (currentLogin: string) : GetCurrentLogin => ({
+  type: ActionType.GetCurrentLogin,
+  payload: currentLogin,
+});
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad;
+type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin;
 
 export {ActionType};
 
-export type {SwitchCityAction, Actions, SwitchSortAction, RequireAuthorization, RequireLogout, OffersLoad};
+export type {SwitchCityAction, Actions, SwitchSortAction, RequireAuthorization, RequireLogout, OffersLoad, GetCurrentLogin};
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
 export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;

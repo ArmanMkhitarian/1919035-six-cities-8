@@ -4,15 +4,32 @@ import Map from '../map/map';
 import React from 'react';
 import CityList from '../city-list/city-list';
 import Sort from '../sort/sort';
+import {AppRoute, AuthorizationStatus} from '../../const';
+import { Link } from 'react-router-dom';
+import {ThunkAppDispatch} from '../../store/action';
+import {connect, ConnectedProps} from 'react-redux';
+import {logoutAction} from '../../store/api-actions';
+
 
 type MainSettings = {
-  countOffer: number;
   offers: Offers,
   cities: string[],
-  currentCity: string
+  currentCity: string,
+  currentLogin: string | null,
+  authorizationStatus: AuthorizationStatus,
 }
 
-function Main({countOffer, offers, cities, currentCity}: MainSettings): JSX.Element {
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onLogout() {
+    dispatch(logoutAction());
+  },
+});
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector> & MainSettings;
+
+function Main({offers, cities, currentCity, currentLogin, authorizationStatus, onLogout}: PropsFromRedux): JSX.Element {
   const [selectedPointId, setSelectedPoint] = React.useState<string | null>(null);
   const onListItemHover = (listItemName: string | null) => {
     const currentPoint = offers.find((offer) =>
@@ -55,18 +72,27 @@ function Main({countOffer, offers, cities, currentCity}: MainSettings): JSX.Elem
               </div>
               <nav className="header__nav">
                 <ul className="header__nav-list">
-                  <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    </a>
-                  </li>
-                  <li className="header__nav-item">
-                    <a className="header__nav-link" href="#">
-                      <span className="header__signout">Sign out</span>
-                    </a>
-                  </li>
+                  {authorizationStatus === AuthorizationStatus.Auth ?
+                    <>
+                      <li className="header__nav-item user">
+                        <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
+                          <div className="header__avatar-wrapper user__avatar-wrapper">
+                          </div>
+                          <span className="header__user-name user__name">{currentLogin}</span>
+                        </Link>
+                      </li>
+                      <li className="header__nav-item">
+                        <Link className="header__nav-link" to={AppRoute.Login}>
+                          <span className="header__signout" onClick ={onLogout}>Sign out</span>
+                        </Link>
+                      </li>
+                    </>
+                    :
+                    <li className="header__nav-item user">
+                      <Link className="header__nav-link" to={AppRoute.Login}>
+                        <span className="header__signout">Sign in</span>
+                      </Link>
+                    </li>}
                 </ul>
               </nav>
             </div>
@@ -79,7 +105,7 @@ function Main({countOffer, offers, cities, currentCity}: MainSettings): JSX.Elem
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{countOffer} places to stay in {currentCity}</b>
+                <b className="places__found">{offers.length} places to stay in {currentCity}</b>
                 <Sort/>
                 <div>
                   <CardList offers = {offers} onListItemHover={onListItemHover}/>
@@ -96,4 +122,6 @@ function Main({countOffer, offers, cities, currentCity}: MainSettings): JSX.Elem
   );
 }
 
-export default Main;
+
+export { Main };
+export default connector(Main);
