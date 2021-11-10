@@ -2,7 +2,8 @@ import {AuthorizationStatus, SortType} from '../const';
 import {ThunkAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {AxiosInstance} from 'axios';
 import {State} from '../types/state';
-import {Offers} from '../types/Offers';
+import {Reviews, Offer, Offers, CommentPost} from '../types/Offers';
+
 
 enum ActionType {
   SwitchCity = 'offers/switchCity',
@@ -10,7 +11,12 @@ enum ActionType {
   RequireAuthorization = 'user/requireAuthorization',
   RequireLogout = 'user/requireLogout',
   OffersLoad = 'data/offersLoad',
-  GetCurrentLogin = 'user/getCurrentLogin'
+  GetCurrentLogin = 'user/getCurrentLogin',
+  GetCurrentOffer = 'data/getCurrentOffer',
+  RedirectToRoute = 'user/redirectToRoute',
+  GetNearbyOffers = 'data/getNearbyOffers',
+  GetReviews = 'data/getReviews',
+  PostReview = 'data/postReview',
 }
 
 type SwitchCityAction = {
@@ -42,6 +48,31 @@ type GetCurrentLogin = {
   payload: string,
 }
 
+type GetCurrentOffer = {
+  type: ActionType.GetCurrentOffer,
+  payload: Offer
+}
+
+type RedirectToRoute = {
+  type: ActionType.RedirectToRoute,
+  payload: string,
+}
+
+type GetNearbyOffersAction = {
+  type: ActionType.GetNearbyOffers;
+  payload: Offers;
+};
+
+type GetReviewsAction = {
+  type: ActionType.GetReviews;
+  payload: Reviews
+}
+
+type PostReviewAction = {
+  type: ActionType.PostReview,
+  payload: CommentPost
+}
+
 export const changeCity = (city: string) : SwitchCityAction => ({
   type: ActionType.SwitchCity,
   payload: city,
@@ -71,7 +102,32 @@ export const getCurrentLogin = (currentLogin: string) : GetCurrentLogin => ({
   payload: currentLogin,
 });
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin;
+export const getCurrentOffer = (currentOffer: Offer) : GetCurrentOffer => ({
+  type: ActionType.GetCurrentOffer,
+  payload: currentOffer,
+});
+
+export const redirectToRouter = (url: string) : RedirectToRoute => ({
+  type: ActionType.RedirectToRoute,
+  payload: url,
+});
+
+export const getNearbyOffers = (offers: Offers) : GetNearbyOffersAction => ({
+  type: ActionType.GetNearbyOffers,
+  payload: offers,
+});
+
+export const getReviews= (reviews: Reviews) : GetReviewsAction => ({
+  type: ActionType.GetReviews,
+  payload: reviews,
+});
+
+export const postReviewAction = (comment: CommentPost) : PostReviewAction => ({
+  type: ActionType.PostReview,
+  payload: comment,
+});
+
+type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction;
 
 export {ActionType};
 

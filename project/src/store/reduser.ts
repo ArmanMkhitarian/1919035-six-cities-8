@@ -1,6 +1,7 @@
 import {Actions, ActionType} from './action';
 import {State} from '../types/state';
 import {AuthorizationStatus, SortType} from '../const';
+import {Offer} from '../types/Offers';
 
 const initialState = {
   currentCity: 'Paris',
@@ -9,6 +10,9 @@ const initialState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
   currentLogin: '',
+  currentOffer: {} as Offer,
+  nearbyOffers: [],
+  reviews: [],
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -25,6 +29,12 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return {...state, offers: action.payload, isDataLoaded: true};
     case ActionType.GetCurrentLogin:
       return {...state, currentLogin: action.payload};
+    case ActionType.GetCurrentOffer:
+      return { ...state, currentOffer: action.payload };
+    case ActionType.GetNearbyOffers:
+      return {...state, nearbyOffers: action.payload};
+    case ActionType.GetReviews:
+      return {...state, reviews: action.payload};
     default:
       return state;
   }

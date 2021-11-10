@@ -1,5 +1,5 @@
 import Main from '../main/main';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
 import Login from '../login/login';
 import Offer from '../property/offer';
 import NotFound404 from '../not-found-404/not-found-404';
@@ -13,6 +13,7 @@ import {State} from '../../types/state';
 import {connect, ConnectedProps} from 'react-redux';
 import {Offers} from '../../types/Offers';
 import Loading from '../loading/loading';
+import browserHistory from '../../browser-history';
 
 
 const getOffersSorted = (currentSortType: string, offers: Offers) => {
@@ -57,7 +58,7 @@ function App(props: ConnectedComponentProps): JSX.Element {
   }
   return (
     <section>
-      <BrowserRouter>
+      <BrowserRouter history = {browserHistory}>
         <Switch>
           <Route exact path={AppRoute.Main}>
             <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} currentLogin={currentLogin} authorizationStatus={authorizationStatus} />
@@ -78,7 +79,7 @@ function App(props: ConnectedComponentProps): JSX.Element {
             <FavoritesEmpty/>
           </Route>
           <Route exact path={AppRoute.Offer}>
-            <Offer offers = {offers}/>
+            <Offer/>
           </Route>
           <Route
             render={() => (

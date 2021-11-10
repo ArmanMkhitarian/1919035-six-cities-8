@@ -1,13 +1,13 @@
 import {
-  getCurrentLogin,
-  offersLoad,
+  getCurrentLogin, getCurrentOffer, getNearbyOffers, getReviews,
+  offersLoad, postReviewAction, redirectToRouter,
   requireAuthorization,
   requireLogout,
   ThunkActionResult
 } from './action';
 
-import {APIRoute, AuthorizationStatus} from '../const';
-import {adaptToClient, Offer} from '../types/Offers';
+import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
+import {adaptToClient, adaptToReview, CommentPost, Offer, Reviews} from '../types/Offers';
 import {dropToken, saveToken, Token} from '../services/token';
 import {AuthData} from '../types/auth-data';
 
@@ -44,5 +44,37 @@ export const logoutAction = (): ThunkActionResult =>
     dropToken();
     dispatch(requireLogout());
     dispatch(getCurrentLogin(''));
+  };
+
+export const fetchOfferAction = (id: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    await api.get(APIRoute.Offer + id)
+      .then((response) => {
+        dispatch(getCurrentOffer(adaptToClient(response.data)));
+      })
+      .catch((error) => {
+        dispatch(redirectToRouter(AppRoute.NotFound));
+      });
+  };
+
+export const fetchNearByOffersAction = (id:string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const { data } = await api.get<Offer[]>(`${APIRoute.Offers}/${id}/nearby`);
+    // eslint-disable-next-line no-console
+    console.log('рядом дома',data);
+    dispatch(getNearbyOffers(data.map((item: unknown) => adaptToClient(item))));
+  };
+
+export const fetchCommentsAction = (id:string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const { data } = await api.get<Reviews>(`${APIRoute.Comments}/${id}`);
+    dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
+  };
+
+export const postCommentAction = ({offerId, comment, rating}:CommentPost): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const {data} = await api.post<Reviews>(`${APIRoute.Comments}/${offerId}`, { comment, rating });
+    dispatch(postReviewAction({ offerId, comment, rating }));
+    dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
   };
 

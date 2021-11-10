@@ -10,6 +10,7 @@ import {createAPI} from './services/api';
 import {requireAuthorization, ThunkAppDispatch} from './store/action';
 import {AuthorizationStatus} from './const';
 import {checkAuthAction, fetchOffersAction} from './store/api-actions';
+import {redirect} from './store/middleware/redirect';
 
 const api = createAPI(
   () => store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
@@ -17,7 +18,7 @@ const api = createAPI(
 
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(thunk.withExtraArgument(api))),
+  composeWithDevTools(applyMiddleware(thunk.withExtraArgument(api), redirect)),
 );
 
 (store.dispatch as ThunkAppDispatch)(fetchOffersAction());

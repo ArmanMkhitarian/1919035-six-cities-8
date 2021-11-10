@@ -4,6 +4,7 @@ import {Dispatch} from '@reduxjs/toolkit';
 import {Actions, changeCity} from '../../store/action';
 import {connect, ConnectedProps} from 'react-redux';
 import cn from 'classnames';
+import { Link } from 'react-router-dom';
 
 type Setting = {
   cities: string[],
@@ -39,13 +40,13 @@ function CityList(props: ConnectedComponentProps) : JSX.Element {
               });
               return (
                 <li className="locations__item" key={city}>
-                  <a href="/#"
+                  <Link to="/"
                     className={ `locations__item-link tabs__item
                       ${classNameActive}` }
                     onClick={() => onChangeCity(city)}
                   >
                     <span>{city}</span>
-                  </a>
+                  </Link>
                 </li>
               );
             })}

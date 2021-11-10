@@ -1,20 +1,55 @@
-import {useParams} from 'react-router-dom';
-import {Offers} from '../../types/Offers';
+import {useParams} from 'react-router';
 import FormSendComment from '../form-send-comment/form-send-comment';
-import Map from '../map/map';
 import React from 'react';
-import CardList from '../card-list/card-list';
+import {State} from '../../types/state';
+import {ThunkAppDispatch} from '../../store/action';
+import {connect, ConnectedProps} from 'react-redux';
+import {fetchCommentsAction, fetchNearByOffersAction, fetchOfferAction} from '../../store/api-actions';
+import ImagesList from '../images-list/images-list';
+import Loading from '../loading/loading';
+import {useEffect } from 'react';
+import Card from '../card/card';
+import ReviewList from '../review-list/review-list';
+import Map from '../map/map';
+import {AuthorizationStatus} from '../../const';
 
-type Settings = {
-  offers: Offers
+
+type ParamsType = {
+  id: string;
 }
 
-function Offer({offers}: Settings): JSX.Element {
-  const { id } = useParams<{ id: string }>();
-  const selectOffer = offers.find((x) => x.id === id.replace(':','').trim());
+const mapStateToProps = ({currentOffer, nearbyOffers, reviews, authorizationStatus}: State) => ({
+  currentOffer,
+  nearbyOffers,
+  reviews,
+  authorizationStatus,
+});
+
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onLoading(id: string) {
+    dispatch(fetchOfferAction(id));
+    dispatch(fetchNearByOffersAction(id));
+    dispatch(fetchCommentsAction(id));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux;
+
+function Offer(props: ConnectedComponentProps): JSX.Element {
+  const params: ParamsType = useParams();
+  const {currentOffer, onLoading, nearbyOffers, reviews, authorizationStatus} = props;
+  useEffect(() => {
+    onLoading(params.id.replace(':', '').trim());
+  }, [onLoading,params.id.replace(':', '').trim()]);
+  if (!currentOffer.id) {
+    return (<Loading/>);
+  }
   return (
     <div>
-      <div style = {{display: 'none'}}>
+      <div style={{display: 'none'}}>
         <svg xmlns="http://www.w3.org/2000/svg">
           <symbol id="icon-arrow-select" viewBox="0 0 7 4">
             <path fillRule="evenodd" clipRule="evenodd" d="M0 0l3.5 2.813L7 0v1.084L3.5 4 0 1.084V0z"/>
@@ -61,34 +96,19 @@ function Offer({offers}: Settings): JSX.Element {
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/room.jpg" alt="Photo studio"/>
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-02.jpg" alt="Photo studio"/>
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-03.jpg" alt="Photo studio"/>
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/studio-01.jpg" alt="Photo studio"/>
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-                </div>
+                <ImagesList images={currentOffer.images}/>
               </div>
             </div>
             <div className="property__container container">
               <div className="property__wrapper">
-                <div className="property__mark">
-                  <span>Premium</span>
-                </div>
+                {currentOffer.isPremium && (
+                  <div className="property__mark">
+                    <span>Premium</span>
+                  </div>
+                )}
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {selectOffer?.title}
+                    {currentOffer?.title}
                   </h1>
                   <button className="property__bookmark-button button" type="button">
                     <svg className="property__bookmark-icon" width="31" height="33">
@@ -106,83 +126,64 @@ function Offer({offers}: Settings): JSX.Element {
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
-                    {selectOffer?.cardType}
+                    {currentOffer.cardType}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    {selectOffer?.bedrooms} Bedrooms
+                    {currentOffer.bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                    Max {selectOffer?.maxAdults} adults
+                    Max {currentOffer.maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
-                  <b className="property__price-value">&euro; {selectOffer?.price}</b>
+                  <b className="property__price-value">&euro; {currentOffer.price}</b>
                   <span className="property__price-text">&nbsp;night</span>
                 </div>
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    <li className="property__inside-item">
-                      Wi-Fi
-                    </li>
-                    <li className="property__inside-item">
-                      Washing machine
-                    </li>
-                    <li className="property__inside-item">
-                      Towels
-                    </li>
-                    <li className="property__inside-item">
-                      Heating
-                    </li>
-                    <li className="property__inside-item">
-                      Coffee machine
-                    </li>
-                    <li className="property__inside-item">
-                      Baby seat
-                    </li>
-                    <li className="property__inside-item">
-                      Kitchen
-                    </li>
-                    <li className="property__inside-item">
-                      Dishwasher
-                    </li>
-                    <li className="property__inside-item">
-                      Cabel TV
-                    </li>
-                    <li className="property__inside-item">
-                      Fridge
-                    </li>
+                    {currentOffer.goods.map((good) => (
+                      <li key={`${currentOffer.id}-${good}`} className="property__inside-item">
+                        {good}
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div className="property__host">
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
                     <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                      <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar"/>
+                      <img className="property__avatar user__avatar" src={currentOffer.host.avatarUrl} width="74" height="74" alt="Host avatar"/>
                     </div>
                     <span className="property__user-name">
-                      {selectOffer?.host.name}
+                      {currentOffer.host.name}
                     </span>
-                    <span className="property__user-status">
-                    Pro
-                    </span>
+                    {currentOffer.host.isPro ? (
+                      <span className="property__user-status">Pro</span>
+                    ) : ('')}
                   </div>
                   <div className="property__description">
-                    {selectOffer?.description}
+                    {currentOffer.description}
                   </div>
                 </div>
                 <section className="property__reviews reviews">
-                  <FormSendComment/>
+                  <ReviewList reviews={reviews}/>
+                  {
+                    authorizationStatus === AuthorizationStatus.Auth &&
+                    <FormSendComment/>
+                  }
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={offers[0].city} offers={offers.slice(0,3)} selectedPointId = {null}/>
+            <Map className="cities__map map" city={currentOffer.city} offers={nearbyOffers} selectedPointId = {null}/>
           </section>
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                <CardList offers={offers.slice(0,3)} onListItemHover={() => null}/>
+                {nearbyOffers.map((offer) => (
+                  <Card key={currentOffer.id} offer={offer} onActive={() => void('')}/>
+                ))}
               </div>
             </section>
           </div>
@@ -193,4 +194,6 @@ function Offer({offers}: Settings): JSX.Element {
   );
 }
 
-export default Offer;
+export {Offer};
+export default connector(Offer);
+

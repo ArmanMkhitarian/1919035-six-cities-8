@@ -24,12 +24,11 @@ export type Offer = {
 };
 
 export type Review = {
-  id: string,
-  name: string,
-  avatar: string,
-  reviewText: string,
-  rating: number,
-  date: string
+  comment: string;
+  date: string,
+  id: number;
+  rating: number;
+  user: Host;
 };
 
 export type Host = {
@@ -38,6 +37,25 @@ export type Host = {
   name: string,
   isPro: boolean
 };
+
+export type CommentPost = {
+  offerId: string;
+  comment: string;
+  rating: number;
+}
+
+export const adaptToReview = (data: any): Review => ({
+  comment: data['comment'],
+  date: data['date'],
+  id: data['id'],
+  rating: data['rating'],
+  user: {
+    id: data['user']['id'],
+    avatarUrl: data['user']['avatar_url'],
+    isPro: data['user']['is_pro'],
+    name: data['user']['name'],
+  },
+});
 
 export const adaptToClient = (data: any): Offer => ({
   city: {
@@ -54,7 +72,7 @@ export const adaptToClient = (data: any): Offer => ({
   isFavorite: data['is_favorite'],
   isPremium: data['is_premium'],
   rating: data['rating'],
-  cardType: data['room'],
+  cardType: data['type'],
   bedrooms: data['bedrooms'],
   maxAdults: data['max_adults'],
   price: data['price'],
@@ -76,3 +94,4 @@ export const adaptToClient = (data: any): Offer => ({
 
 export type Reviews = Review[];
 export type Offers = Offer[];
+
