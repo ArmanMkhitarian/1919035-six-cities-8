@@ -60,8 +60,6 @@ export const fetchOfferAction = (id: string): ThunkActionResult =>
 export const fetchNearByOffersAction = (id:string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Offer[]>(`${APIRoute.Offers}/${id}/nearby`);
-    // eslint-disable-next-line no-console
-    console.log('рядом дома',data);
     dispatch(getNearbyOffers(data.map((item: unknown) => adaptToClient(item))));
   };
 

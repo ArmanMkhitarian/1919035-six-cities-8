@@ -4,32 +4,15 @@ import Map from '../map/map';
 import React from 'react';
 import CityList from '../city-list/city-list';
 import Sort from '../sort/sort';
-import {AppRoute, AuthorizationStatus} from '../../const';
-import { Link } from 'react-router-dom';
-import {ThunkAppDispatch} from '../../store/action';
-import {connect, ConnectedProps} from 'react-redux';
-import {logoutAction} from '../../store/api-actions';
-
+import Header from '../header/header';
 
 type MainSettings = {
   offers: Offers,
   cities: string[],
   currentCity: string,
-  currentLogin: string | null,
-  authorizationStatus: AuthorizationStatus,
 }
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onLogout() {
-    dispatch(logoutAction());
-  },
-});
-
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector> & MainSettings;
-
-function Main({offers, cities, currentCity, currentLogin, authorizationStatus, onLogout}: PropsFromRedux): JSX.Element {
+function Main({offers, cities, currentCity}: MainSettings): JSX.Element {
   const [selectedPointId, setSelectedPoint] = React.useState<string | null>(null);
   const onListItemHover = (listItemName: string | null) => {
     const currentPoint = offers.find((offer) =>
@@ -62,43 +45,7 @@ function Main({offers, cities, currentCity, currentLogin, authorizationStatus, o
       </div>
 
       <div className="page page--gray page--main">
-        <header className="header">
-          <div className="container">
-            <div className="header__wrapper">
-              <div className="header__left">
-                <a className="header__logo-link header__logo-link--active">
-                  <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-                </a>
-              </div>
-              <nav className="header__nav">
-                <ul className="header__nav-list">
-                  {authorizationStatus === AuthorizationStatus.Auth ?
-                    <>
-                      <li className="header__nav-item user">
-                        <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
-                          <div className="header__avatar-wrapper user__avatar-wrapper">
-                          </div>
-                          <span className="header__user-name user__name">{currentLogin}</span>
-                        </Link>
-                      </li>
-                      <li className="header__nav-item">
-                        <Link className="header__nav-link" to={AppRoute.Login}>
-                          <span className="header__signout" onClick ={onLogout}>Sign out</span>
-                        </Link>
-                      </li>
-                    </>
-                    :
-                    <li className="header__nav-item user">
-                      <Link className="header__nav-link" to={AppRoute.Login}>
-                        <span className="header__signout">Sign in</span>
-                      </Link>
-                    </li>}
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </header>
-
+        <Header/>
         <main className="page__main page__main--index">
           <CityList cities={cities}/>
           <div className="cities">
@@ -122,6 +69,4 @@ function Main({offers, cities, currentCity, currentLogin, authorizationStatus, o
   );
 }
 
-
-export { Main };
-export default connector(Main);
+export default Main;

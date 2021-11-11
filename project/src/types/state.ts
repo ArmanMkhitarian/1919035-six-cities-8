@@ -1,16 +1,23 @@
 import {Offer, Offers, Reviews} from './Offers';
 import {AuthorizationStatus, SortType} from '../const';
+import {RootState} from '../store/root-reducer';
 
-type State = {
-  currentCity: string;
-  offers: Offers;
-  currentSortType: SortType;
+export type State = RootState;
+
+export type userData = {
   authorizationStatus: AuthorizationStatus,
-  isDataLoaded: boolean,
   currentLogin: string | null,
+};
+
+export type offerData = {
   currentOffer: Offer,
   nearbyOffers: Offers,
   reviews: Reviews
 };
 
-export type {State};
+export type offersData = {
+  currentCity: string;
+  offers: Offers;
+  currentSortType: SortType;
+  isDataLoaded: boolean,
+};

@@ -1,23 +1,16 @@
 import {FormEvent, useRef} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
-import {ThunkAppDispatch} from '../../store/action';
 import {AuthData} from '../../types/auth-data';
 import {loginAction} from '../../store/api-actions';
 import {useHistory } from 'react-router-dom';
 import {AppRoute} from '../../const';
+import {useDispatch} from 'react-redux';
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(authData: AuthData) {
+function Login(): JSX.Element {
+  const dispatch = useDispatch();
+  const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
-  },
-});
+  };
 
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Login(props: PropsFromRedux): JSX.Element {
-  const {onSubmit} = props;
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const history = useHistory();
@@ -51,7 +44,7 @@ function Login(props: PropsFromRedux): JSX.Element {
           <div className="container">
             <div className="header__wrapper">
               <div className="header__left">
-                <a className="header__logo-link" href="main.html">
+                <a className="header__logo-link" href="/">
                   <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
                 </a>
               </div>
@@ -112,6 +105,5 @@ function Login(props: PropsFromRedux): JSX.Element {
   );
 }
 
-export { Login };
-export default connector(Login);
+export default Login;
 

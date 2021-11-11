@@ -1,35 +1,20 @@
 import React, {FormEvent} from 'react';
 import {CommentPost} from '../../types/Offers';
-import {ThunkAppDispatch} from '../../store/action';
-import {State} from '../../types/state';
-import {connect, ConnectedProps} from 'react-redux';
 import {postCommentAction} from '../../store/api-actions';
+import {getCurrentOffer} from '../../store/offer-data/selectors';
+import {useSelector, useDispatch} from 'react-redux';
 
-const mapStateToProps = ({currentOffer, authorizationStatus} : State) => ({
-  currentOffer,
-  authorizationStatus,
-});
 
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSetComment(newComment: CommentPost) {
-    // eslint-disable-next-line no-console
-    console.log('Новый коммент', newComment);
+function FormSendComment(): JSX.Element {
+  const dispatch = useDispatch();
+  const currentOffer = useSelector(getCurrentOffer);
+  const onSetComment = (newComment: CommentPost) => {
     dispatch(postCommentAction(newComment));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux;
-
-function FormSendComment(props: ConnectedComponentProps): JSX.Element {
-  const {currentOffer, onSetComment} = props;
+  };
   const [commentText,setCommentText] = React.useState('');
   const [ratingValue,setRatingValue] = React.useState(0);
 
   const onSubmitHandle = (evt: FormEvent<HTMLFormElement>) => {
-    // eslint-disable-next-line no-console
-    console.log('Нажали кнопку');
     evt.preventDefault();
     if (commentText !== null && ratingValue !== null) {
       onSetComment({offerId: currentOffer.id, comment: commentText, rating: ratingValue});
@@ -96,6 +81,5 @@ function FormSendComment(props: ConnectedComponentProps): JSX.Element {
   );
 }
 
-export {FormSendComment};
-export default connector(FormSendComment);
+export default FormSendComment;
 

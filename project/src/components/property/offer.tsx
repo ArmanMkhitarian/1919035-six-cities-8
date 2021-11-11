@@ -1,9 +1,6 @@
 import {useParams} from 'react-router';
 import FormSendComment from '../form-send-comment/form-send-comment';
 import React from 'react';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../store/action';
-import {connect, ConnectedProps} from 'react-redux';
 import {fetchCommentsAction, fetchNearByOffersAction, fetchOfferAction} from '../../store/api-actions';
 import ImagesList from '../images-list/images-list';
 import Loading from '../loading/loading';
@@ -12,35 +9,28 @@ import Card from '../card/card';
 import ReviewList from '../review-list/review-list';
 import Map from '../map/map';
 import {AuthorizationStatus} from '../../const';
-
+import Header from '../header/header';
+import {getCurrentOffer, getNearbyOffers, getReviews} from '../../store/offer-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-data/selectors';
+import {useSelector, useDispatch} from 'react-redux';
 
 type ParamsType = {
   id: string;
 }
 
-const mapStateToProps = ({currentOffer, nearbyOffers, reviews, authorizationStatus}: State) => ({
-  currentOffer,
-  nearbyOffers,
-  reviews,
-  authorizationStatus,
-});
-
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onLoading(id: string) {
+function Offer(): JSX.Element {
+  const dispatch = useDispatch();
+  const params: ParamsType = useParams();
+  const currentOffer = useSelector(getCurrentOffer);
+  const reviews = useSelector(getReviews);
+  const nearbyOffers = useSelector(getNearbyOffers);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const onLoading = (id: string) => {
     dispatch(fetchOfferAction(id));
     dispatch(fetchNearByOffersAction(id));
     dispatch(fetchCommentsAction(id));
-  },
-});
+  };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux;
-
-function Offer(props: ConnectedComponentProps): JSX.Element {
-  const params: ParamsType = useParams();
-  const {currentOffer, onLoading, nearbyOffers, reviews, authorizationStatus} = props;
   useEffect(() => {
     onLoading(params.id.replace(':', '').trim());
   }, [onLoading,params.id.replace(':', '').trim()]);
@@ -64,34 +54,7 @@ function Offer(props: ConnectedComponentProps): JSX.Element {
       </div>
 
       <div className="page">
-        <header className="header">
-          <div className="container">
-            <div className="header__wrapper">
-              <div className="header__left">
-                <a className="header__logo-link" href="/main">
-                  <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
-                </a>
-              </div>
-              <nav className="header__nav">
-                <ul className="header__nav-list">
-                  <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    </a>
-                  </li>
-                  <li className="header__nav-item">
-                    <a className="header__nav-link" href="#">
-                      <span className="header__signout">Sign out</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </header>
-
+        <Header/>
         <main className="page__main page__main--property">
           <section className="property">
             <div className="property__gallery-container container">
@@ -193,7 +156,5 @@ function Offer(props: ConnectedComponentProps): JSX.Element {
     </div>
   );
 }
-
-export {Offer};
-export default connector(Offer);
+export default Offer;
 

@@ -9,11 +9,11 @@ import Favorites from '../favorites/favorites';
 import PrivateRoute from '../private-route/private-route';
 import React from 'react';
 import {cities} from '../../const';
-import {State} from '../../types/state';
-import {connect, ConnectedProps} from 'react-redux';
 import {Offers} from '../../types/Offers';
 import Loading from '../loading/loading';
 import browserHistory from '../../browser-history';
+import {getCurrentCity, getCurrentSortType, getDataLoaded, getOffers} from '../../store/offers-data/selectors';
+import {useSelector} from 'react-redux';
 
 
 const getOffersSorted = (currentSortType: string, offers: Offers) => {
@@ -33,22 +33,13 @@ const getOffersSorted = (currentSortType: string, offers: Offers) => {
   }
 };
 
-const mapStateToProps = ({ currentCity, offers, currentSortType, isDataLoaded, currentLogin, authorizationStatus }: State) => ({
-  currentCity,
-  offers,
-  currentSortType,
-  isDataLoaded,
-  currentLogin,
-  authorizationStatus,
-});
 
-const connector = connect(mapStateToProps);
+function App(): JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
+  const offers = useSelector(getOffers);
+  const currentSortType = useSelector(getCurrentSortType);
+  const isDataLoaded = useSelector(getDataLoaded);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux;
-
-function App(props: ConnectedComponentProps): JSX.Element {
-  const {offers, currentCity, currentSortType, isDataLoaded, currentLogin, authorizationStatus} = props;
   const offersFilter = offers.filter((offer) => offer.city.name === currentCity);
   const offersSorted = getOffersSorted(currentSortType, offersFilter);
   if (!isDataLoaded) {
@@ -61,10 +52,10 @@ function App(props: ConnectedComponentProps): JSX.Element {
       <BrowserRouter history = {browserHistory}>
         <Switch>
           <Route exact path={AppRoute.Main}>
-            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} currentLogin={currentLogin} authorizationStatus={authorizationStatus} />
+            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
           </Route>
           <Route exact path={AppRoute.Root}>
-            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} currentLogin={currentLogin} authorizationStatus={authorizationStatus} />
+            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
           </Route>
           <Route exact path={AppRoute.Login}>
             <Login/>
@@ -92,5 +83,4 @@ function App(props: ConnectedComponentProps): JSX.Element {
   );
 }
 
-export { App };
-export default connector(App);
+export default App;
