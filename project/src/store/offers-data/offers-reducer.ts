@@ -7,6 +7,7 @@ const initialState: offersData = {
   offers: [],
   currentSortType: SortType.Popular,
   isDataLoaded: false,
+  favoritesOffer: [],
 };
 
 const offersReducer = (state = initialState, action: Actions): offersData => {
@@ -17,6 +18,8 @@ const offersReducer = (state = initialState, action: Actions): offersData => {
       return {...state, currentSortType: action.payload};
     case ActionType.OffersLoad:
       return {...state, offers: action.payload, isDataLoaded: true};
+    case ActionType.SetFavoriteOffer:
+      return {...state, favoritesOffer: action.payload};
     default:
       return state;
   }

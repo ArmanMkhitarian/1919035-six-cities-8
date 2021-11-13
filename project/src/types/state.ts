@@ -20,4 +20,5 @@ export type offersData = {
   offers: Offers;
   currentSortType: SortType;
   isDataLoaded: boolean,
+  favoritesOffer: Offers,
 };

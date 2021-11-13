@@ -17,6 +17,7 @@ enum ActionType {
   GetNearbyOffers = 'data/getNearbyOffers',
   GetReviews = 'data/getReviews',
   PostReview = 'data/postReview',
+  SetFavoriteOffer = 'data/setFavoriteOffer'
 }
 
 type SwitchCityAction = {
@@ -73,6 +74,11 @@ type PostReviewAction = {
   payload: CommentPost
 }
 
+type SetFavoriteOfferAction = {
+  type: ActionType.SetFavoriteOffer,
+  payload: Offers
+}
+
 export const changeCity = (city: string) : SwitchCityAction => ({
   type: ActionType.SwitchCity,
   payload: city,
@@ -127,7 +133,12 @@ export const postReviewAction = (comment: CommentPost) : PostReviewAction => ({
   payload: comment,
 });
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction;
+export const setFavoritesOffers = (offers: Offers) : SetFavoriteOfferAction => ({
+  type: ActionType.SetFavoriteOffer,
+  payload: offers,
+});
+
+type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction;
 
 export {ActionType};
 

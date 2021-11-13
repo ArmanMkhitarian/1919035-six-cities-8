@@ -33,7 +33,7 @@ function Offer(): JSX.Element {
 
   useEffect(() => {
     onLoading(params.id.replace(':', '').trim());
-  }, [onLoading,params.id.replace(':', '').trim()]);
+  }, []);
   if (!currentOffer.id) {
     return (<Loading/>);
   }
@@ -152,7 +152,6 @@ function Offer(): JSX.Element {
           </div>
         </main>
       </div>
-
     </div>
   );
 }

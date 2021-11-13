@@ -1,69 +1,84 @@
-import {Offers} from '../../types/Offers';
 import FavoritesCard from './favorites-card';
 import Header from '../header/header';
+import {useDispatch, useSelector} from 'react-redux';
+import {getFavorites} from '../../store/offers-data/selectors';
+import {getFavoriteOffers} from '../../store/api-actions';
+import {useEffect} from 'react';
+import {cities} from '../../const';
+import FavoritesEmpty from './favorites-empty';
 
 
-type Settings = {
-  offers: Offers
-}
+function Favorites(): JSX.Element {
+  const dispatch = useDispatch();
+  const offers = useSelector(getFavorites);
 
-function Favorites({offers}: Settings): JSX.Element {
-  return (
-    <section>
-      <div style = {{display: 'none'}}>
-        <svg xmlns="http://www.w3.org/2000/svg">
-          <symbol id="icon-arrow-select" viewBox="0 0 7 4">
-            <path fillRule="evenodd" clipRule="evenodd" d="M0 0l3.5 2.813L7 0v1.084L3.5 4 0 1.084V0z"/>
-          </symbol>
-          <symbol id="icon-bookmark" viewBox="0 0 17 18">
-            <path d="M3.993 2.185l.017-.092V2c0-.554.449-1 .99-1h10c.522 0 .957.41.997.923l-2.736 14.59-4.814-2.407-.39-.195-.408.153L1.31 16.44 3.993 2.185z"/>
-          </symbol>
-          <symbol id="icon-star" viewBox="0 0 13 12">
-            <path fillRule="evenodd" clipRule="evenodd" d="M6.5 9.644L10.517 12 9.451 7.56 13 4.573l-4.674-.386L6.5 0 4.673 4.187 0 4.573 3.549 7.56 2.483 12 6.5 9.644z"/>
-          </symbol>
-        </svg>
-      </div>
+  const onLoading = () => {
+    dispatch(getFavoriteOffers());
+  };
 
-      <div className="page">
-        <Header/>
-        <main className="page__main page__main--favorites">
-          <div className="page__favorites-container container">
-            <section className="favorites">
-              <h1 className="favorites__title">Saved listing</h1>
-              <ul className="favorites__list">
-                <li className="favorites__locations-items">
-                  <div className="favorites__locations locations locations--current">
-                    <div className="locations__item">
-                      <a className="locations__item-link" href="#">
-                        <span>Amsterdam</span>
-                      </a>
-                    </div>
-                  </div>
-                  <div className="favorites__places">
-                    {
-                      offers.map((offer, id) => {
-                        const keyValue = `${id}-${offer.title}`;
-                        return(
-                          <article className="favorites__card place-card" key={keyValue}>
-                            <FavoritesCard offer = {offer}/>
-                          </article>
-                        );
-                      })
-                    }
-                  </div>
-                </li>
-              </ul>
-            </section>
-          </div>
-        </main>
-        <footer className="footer container">
-          <a className="footer__logo-link" href="main.html">
-            <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-          </a>
-        </footer>
-      </div>
-    </section>
-  );
+  useEffect(() => {
+    onLoading();
+  }, []);
+
+  const groups = cities.map((city) => (
+    {
+      city,
+      offers: offers.filter((offer) => offer.city.name === city),
+    }
+  ));
+  const groupsOffers = groups.filter((group) => group.offers.length > 0);
+
+  if(groupsOffers.length > 0){
+    return (
+      <section>
+        <div className="page">
+          <Header/>
+          <main className="page__main page__main--favorites">
+            <div className="page__favorites-container container">
+              <section className="favorites">
+                <h1 className="favorites__title">Saved listing</h1>
+                <ul className="favorites__list">
+                  {groupsOffers.map((group) => (
+                    <li key = {group.city} className="favorites__locations-items">
+                      <div className="favorites__locations locations locations--current">
+                        <div className="locations__item">
+                          <a className="locations__item-link" href="#">
+                            <span>{group.city}</span>
+                          </a>
+                        </div>
+                      </div>
+                      <div className="favorites__places">
+                        {
+                          group.offers.map((offer, id) => {
+                            const keyValue = `${id}-${offer.title}`;
+                            return(
+                              <article className="favorites__card place-card" key={keyValue}>
+                                <FavoritesCard offer = {offer}/>
+                              </article>
+                            );
+                          })
+                        }
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          </main>
+          <footer className="footer container">
+            <a className="footer__logo-link" href="main.html">
+              <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
+            </a>
+          </footer>
+        </div>
+      </section>
+    );
+  }
+  else {
+    return <FavoritesEmpty/>;
+  }
+
+
 }
 
 export default Favorites;

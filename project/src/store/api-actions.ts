@@ -2,7 +2,7 @@ import {
   getCurrentLogin, getCurrentOffer, getNearbyOffers, getReviews,
   offersLoad, postReviewAction, redirectToRouter,
   requireAuthorization,
-  requireLogout,
+  requireLogout, setFavoritesOffers,
   ThunkActionResult
 } from './action';
 
@@ -74,5 +74,22 @@ export const postCommentAction = ({offerId, comment, rating}:CommentPost): Thunk
     const {data} = await api.post<Reviews>(`${APIRoute.Comments}/${offerId}`, { comment, rating });
     dispatch(postReviewAction({ offerId, comment, rating }));
     dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
+  };
+
+
+export const sendFavoriteOffer = (id: string, isFavorite: boolean): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const status = isFavorite ? 0 : 1;
+    await api.post(`${APIRoute.Favorite}/${id}/${status}`);
+    dispatch(fetchOffersAction());
+    dispatch(getFavoriteOffers());
+  };
+
+export const getFavoriteOffers = (): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const { data } = await api.get(APIRoute.Favorite);
+    //eslint-disable-next-line
+    console.log('гетфаворите',data);
+    dispatch(setFavoritesOffers(data.map((item: unknown) => adaptToClient(item))));
   };
 
