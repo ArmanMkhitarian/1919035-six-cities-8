@@ -1,6 +1,6 @@
-import {CommentPost, Offer, Offers, Review} from '../types/Offers';
+import {Offer, Offers, Review} from '../types/Offers';
 import {AuthorizationStatus, SortType} from '../const';
-import {userData} from '../types/state';
+
 
 export const getReviewsMock = (): Review[] => [
   {
