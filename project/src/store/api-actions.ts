@@ -49,13 +49,9 @@ export const fetchOfferAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     await api.get(APIRoute.Offer + id)
       .then((response) => {
-        //eslint-disable-next-line
-        console.log('Получили оффер');
         dispatch(getCurrentOffer(adaptToClient(response.data)));
       })
       .catch((error) => {
-        //eslint-disable-next-line
-        console.log('Произошел редирект');
         dispatch(redirectToRouter(AppRoute.NotFound));
       });
   };
