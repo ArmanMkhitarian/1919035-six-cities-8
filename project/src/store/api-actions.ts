@@ -23,7 +23,6 @@ export const checkAuthAction = (): ThunkActionResult =>
       .then((response) => {
         if(response.data){
           dispatch(requireAuthorization(AuthorizationStatus.Auth));
-          dispatch(getCurrentLogin(response.data.email));
         } else {
           dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         }
@@ -50,9 +49,13 @@ export const fetchOfferAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     await api.get(APIRoute.Offer + id)
       .then((response) => {
+        //eslint-disable-next-line
+        console.log('Получили оффер');
         dispatch(getCurrentOffer(adaptToClient(response.data)));
       })
       .catch((error) => {
+        //eslint-disable-next-line
+        console.log('Произошел редирект');
         dispatch(redirectToRouter(AppRoute.NotFound));
       });
   };
@@ -88,8 +91,6 @@ export const sendFavoriteOffer = (id: string, isFavorite: boolean): ThunkActionR
 export const getFavoriteOffers = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
     const { data } = await api.get(APIRoute.Favorite);
-    //eslint-disable-next-line
-    console.log('гетфаворите',data);
     dispatch(setFavoritesOffers(data.map((item: unknown) => adaptToClient(item))));
   };
 
