@@ -1,5 +1,5 @@
 import Main from '../main/main';
-import {Router as BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Login from '../login/login';
 import Offer from '../property/offer';
 import NotFound404 from '../not-found-404/not-found-404';
@@ -11,7 +11,6 @@ import React from 'react';
 import {cities} from '../../const';
 import {Offers} from '../../types/Offers';
 import Loading from '../loading/loading';
-import browserHistory from '../../browser-history';
 import {getCurrentCity, getCurrentSortType, getDataLoaded, getOffers} from '../../store/offers-data/selectors';
 import {useSelector} from 'react-redux';
 
@@ -48,38 +47,32 @@ function App(): JSX.Element {
     );
   }
   return (
-    <section>
-      <BrowserRouter history = {browserHistory}>
-        <Switch>
-          <Route exact path={AppRoute.Main}>
-            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
-          </Route>
-          <Route exact path={AppRoute.Root}>
-            <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
-          </Route>
-          <Route exact path={AppRoute.Login}>
-            <Login/>
-          </Route>
-          <PrivateRoute
-            exact
-            path={AppRoute.Favorites}
-            render={() => <Favorites/>}
-          >
-          </PrivateRoute>
-          <Route exact path={AppRoute.FavoritesEmpty}>
-            <FavoritesEmpty/>
-          </Route>
-          <Route exact path={AppRoute.Offer}>
-            <Offer/>
-          </Route>
-          <Route
-            render={() => (
-              <NotFound404/>
-            )}
-          />
-        </Switch>
-      </BrowserRouter>
-    </section>
+    <Switch>
+      <Route exact path={AppRoute.Main}>
+        <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
+      </Route>
+      <Route exact path={AppRoute.Root}>
+        <Main currentCity = {currentCity} cities={cities} offers = {offersSorted} />
+      </Route>
+      <Route exact path={AppRoute.Login}>
+        <Login/>
+      </Route>
+      <PrivateRoute
+        exact
+        path={AppRoute.Favorites}
+        render={() => <Favorites/>}
+      >
+      </PrivateRoute>
+      <Route exact path={AppRoute.FavoritesEmpty}>
+        <FavoritesEmpty/>
+      </Route>
+      <Route exact path={AppRoute.Offer}>
+        <Offer/>
+      </Route>
+      <Route>
+        <NotFound404/>
+      </Route>
+    </Switch>
   );
 }
 

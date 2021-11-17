@@ -1,4 +1,4 @@
-import {Offer, Offers, Review} from '../types/Offers';
+import {Offer, Offers, Review, Reviews} from '../types/Offers';
 import {AuthorizationStatus, SortType} from '../const';
 
 
@@ -102,11 +102,17 @@ export const getOffersDataMock = {
   currentCity: 'Paris',
   offers: getOffersMock(),
   currentSortType: SortType.Popular,
-  isDataLoaded: false,
-  favoritesOffer: getOffersMock(),
+  isDataLoaded: true,
+  favoritesOffer: [],
 };
 
 export const getUserData = {
   authorizationStatus: AuthorizationStatus.NoAuth,
   currentLogin: '',
+};
+
+export const getOfferDataMock = {
+  currentOffer: getOfferMock(),
+  nearbyOffers: getOffersMock(),
+  reviews: getReviewsMock(),
 };
