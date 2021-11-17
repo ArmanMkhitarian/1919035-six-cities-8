@@ -32,7 +32,7 @@ function Offer(): JSX.Element {
   };
 
   useEffect(() => {
-    onLoading(params.id.replace(':', '').trim());
+    onLoading(params.id);
   }, []);
   if (!currentOffer.id) {
     return (<Loading/>);
@@ -144,7 +144,7 @@ function Offer(): JSX.Element {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                {nearbyOffers.map((offer) => (
+                {nearbyOffers.slice(0,3).map((offer) => (
                   <Card key={currentOffer.id} offer={offer} onActive={() => void('')}/>
                 ))}
               </div>

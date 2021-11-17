@@ -1,4 +1,4 @@
-import {Offer, Offers, Review, Reviews} from '../types/Offers';
+import {Offer, Offers, Review} from '../types/Offers';
 import {AuthorizationStatus, SortType} from '../const';
 
 

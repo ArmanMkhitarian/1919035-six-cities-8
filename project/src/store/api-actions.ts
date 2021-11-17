@@ -47,7 +47,7 @@ export const logoutAction = (): ThunkActionResult =>
 
 export const fetchOfferAction = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    await api.get(APIRoute.Offer + id)
+    await api.get(APIRoute.Offer + id.replace(':', '').trim())
       .then((response) => {
         dispatch(getCurrentOffer(adaptToClient(response.data)));
       })
@@ -58,13 +58,13 @@ export const fetchOfferAction = (id: string): ThunkActionResult =>
 
 export const fetchNearByOffersAction = (id:string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const { data } = await api.get<Offer[]>(`${APIRoute.Offers}/${id}/nearby`);
+    const { data } = await api.get<Offer[]>(`${APIRoute.Offers}/${id.replace(':', '').trim()}/nearby`);
     dispatch(getNearbyOffers(data.map((item: unknown) => adaptToClient(item))));
   };
 
 export const fetchCommentsAction = (id:string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const { data } = await api.get<Reviews>(`${APIRoute.Comments}/${id}`);
+    const { data } = await api.get<Reviews>(`${APIRoute.Comments}/${id.replace(':', '').trim()}`);
     dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
   };
 
