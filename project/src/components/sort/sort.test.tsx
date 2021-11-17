@@ -5,7 +5,6 @@ import {getOffersDataMock} from '../../services/mocks';
 import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import Sort from './sort';
-import {SortType} from '../../const';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
