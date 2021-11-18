@@ -37,6 +37,7 @@ function Offer(): JSX.Element {
   if (!currentOffer.id) {
     return (<Loading/>);
   }
+  nearbyOffers.push(currentOffer);
   return (
     <div>
       <div style={{display: 'none'}}>
@@ -138,7 +139,7 @@ function Offer(): JSX.Element {
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={currentOffer.city} offers={nearbyOffers} selectedPointId = {null}/>
+            <Map className="cities__map map" city={currentOffer.city} offers={nearbyOffers} selectedPointId = {currentOffer.id}/>
           </section>
           <div className="container">
             <section className="near-places places">
