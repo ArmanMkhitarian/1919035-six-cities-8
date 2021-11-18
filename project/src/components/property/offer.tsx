@@ -10,7 +10,6 @@ import {
 import ImagesList from '../images-list/images-list';
 import Loading from '../loading/loading';
 import {useEffect } from 'react';
-import Card from '../card/card';
 import ReviewList from '../review-list/review-list';
 import Map from '../map/map';
 import {AppRoute, AuthorizationStatus} from '../../const';
@@ -19,6 +18,7 @@ import {getCurrentOffer, getNearbyOffers, getReviews} from '../../store/offer-da
 import {getAuthorizationStatus} from '../../store/user-data/selectors';
 import {useSelector, useDispatch} from 'react-redux';
 import browserHistory from '../../browser-history';
+import CardList from '../card-list/card-list';
 
 type ParamsType = {
   id: string;
@@ -43,7 +43,10 @@ function Offer(): JSX.Element {
   if (!currentOffer.id) {
     return (<Loading/>);
   }
-  nearbyOffers.push(currentOffer);
+
+  const mapPoints = [...nearbyOffers ?? []];
+  mapPoints.push(currentOffer);
+
   const favoriteButtonStyle = currentOffer.isFavorite ? 'property__bookmark-button--active' : '';
   const handleClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
@@ -154,15 +157,13 @@ function Offer(): JSX.Element {
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={currentOffer.city} offers={nearbyOffers} selectedPointId = {currentOffer.id}/>
+            <Map className="cities__map map" city={currentOffer.city} offers={mapPoints} selectedPointId = {currentOffer.id}/>
           </section>
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                {nearbyOffers.slice(0,3).map((offer) => (
-                  <Card key={currentOffer.id} offer={offer} onActive={() => void('')}/>
-                ))}
+                <CardList offers={nearbyOffers.slice(0,3)} onListItemHover={() => null}/>
               </div>
             </section>
           </div>
