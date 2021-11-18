@@ -56,7 +56,7 @@ function Card(props: Settings): JSX.Element {
           </button>
         </div>
         <div className="place-card__stars rating__stars">
-          <span style={{width: offer.rating*20}}/>
+          <span style={{width: `${offer.rating*20}%`}}/>
           <span className="visually-hidden">Rating</span>
         </div>
         <h2 className="place-card__name">

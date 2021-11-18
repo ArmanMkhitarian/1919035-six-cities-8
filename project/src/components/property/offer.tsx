@@ -1,18 +1,24 @@
 import {useParams} from 'react-router';
 import FormSendComment from '../form-send-comment/form-send-comment';
 import React from 'react';
-import {fetchCommentsAction, fetchNearByOffersAction, fetchOfferAction} from '../../store/api-actions';
+import {
+  fetchCommentsAction,
+  fetchNearByOffersAction,
+  fetchOfferAction,
+  sendFavoriteOffer
+} from '../../store/api-actions';
 import ImagesList from '../images-list/images-list';
 import Loading from '../loading/loading';
 import {useEffect } from 'react';
 import Card from '../card/card';
 import ReviewList from '../review-list/review-list';
 import Map from '../map/map';
-import {AuthorizationStatus} from '../../const';
+import {AppRoute, AuthorizationStatus} from '../../const';
 import Header from '../header/header';
 import {getCurrentOffer, getNearbyOffers, getReviews} from '../../store/offer-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-data/selectors';
 import {useSelector, useDispatch} from 'react-redux';
+import browserHistory from '../../browser-history';
 
 type ParamsType = {
   id: string;
@@ -38,6 +44,15 @@ function Offer(): JSX.Element {
     return (<Loading/>);
   }
   nearbyOffers.push(currentOffer);
+  const favoriteButtonStyle = currentOffer.isFavorite ? 'property__bookmark-button--active' : '';
+  const handleClick = () => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      browserHistory.push(AppRoute.Login);
+    }
+    else {
+      dispatch(sendFavoriteOffer(currentOffer.id, currentOffer.isFavorite));
+    }
+  };
   return (
     <div>
       <div style={{display: 'none'}}>
@@ -74,7 +89,7 @@ function Offer(): JSX.Element {
                   <h1 className="property__name">
                     {currentOffer?.title}
                   </h1>
-                  <button className="property__bookmark-button button" type="button">
+                  <button className={`property__bookmark-button ${favoriteButtonStyle} button`} type="button" onClick={handleClick}>
                     <svg className="property__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
@@ -83,10 +98,10 @@ function Offer(): JSX.Element {
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: '80%'}}/>
+                    <span style={{width: `${currentOffer.rating*20}%`}}/>
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="property__rating-value rating__value">4.8</span>
+                  <span className="property__rating-value rating__value">{currentOffer.rating}</span>
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
