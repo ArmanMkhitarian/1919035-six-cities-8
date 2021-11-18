@@ -1,6 +1,6 @@
 import { Offers } from '../../types/Offers';
 import Card from '../card/card';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 type Settings = {
   offers: Offers,
@@ -10,7 +10,9 @@ type Settings = {
 function CardList(props: Settings): JSX.Element{
   const [ActiveOfferId, setActiveOfferId] = React.useState<string | null>(null);
   const {offers, onListItemHover} = props;
-  onListItemHover(ActiveOfferId);
+  useEffect(() => {
+    onListItemHover(ActiveOfferId);
+  }, [ActiveOfferId]);
   return (
     <div className='cities__places-list places__list tabs__content'>
       {
