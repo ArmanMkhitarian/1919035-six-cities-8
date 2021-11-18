@@ -1,16 +1,30 @@
-import {FormEvent, useRef} from 'react';
+import {FormEvent, SyntheticEvent, useRef} from 'react';
 import {AuthData} from '../../types/auth-data';
 import {loginAction} from '../../store/api-actions';
-import {useHistory } from 'react-router-dom';
-import {AppRoute} from '../../const';
-import {useDispatch} from 'react-redux';
+import {useHistory, Link} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus, cities} from '../../const';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAuthorizationStatus} from '../../store/user-data/selectors';
+import {changeCity} from '../../store/action';
+import browserHistory from '../../browser-history';
 
 function Login(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  if(authorizationStatus === AuthorizationStatus.Auth){
+    browserHistory.push(AppRoute.Root);
+  }
   const dispatch = useDispatch();
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
   };
 
+  const onClickCity = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(changeCity(currentCity));
+    browserHistory.push(AppRoute.Root);
+  };
+
+  const currentCity = cities[Math.floor(Math.random() * cities.length)];
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const history = useHistory();
@@ -93,9 +107,9 @@ function Login(): JSX.Element {
             </section>
             <section className="locations locations--login locations--current">
               <div className="locations__item">
-                <a className="locations__item-link" href="#">
-                  <span>Amsterdam</span>
-                </a>
+                <Link className="locations__item-link" to='#' onClick={onClickCity}>
+                  <span>{currentCity}</span>
+                </Link>
               </div>
             </section>
           </div>
