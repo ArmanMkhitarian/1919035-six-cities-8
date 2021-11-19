@@ -60,7 +60,6 @@ function Map({city, className, offers, selectedPointId }: Setting) {
 
   return (
     <div className={className}
-      style={{height: '500px'}}
       ref={mapRef}
     >
     </div>

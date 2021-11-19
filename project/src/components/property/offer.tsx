@@ -157,7 +157,7 @@ function Offer(): JSX.Element {
                 </section>
               </div>
             </div>
-            <Map className="cities__map map" city={currentOffer.city} offers={mapPoints} selectedPointId = {currentOffer.id}/>
+            <Map className="property__map map" city={currentOffer.city} offers={mapPoints} selectedPointId = {currentOffer.id}/>
           </section>
           <div className="container">
             <section className="near-places places">
