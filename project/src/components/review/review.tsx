@@ -1,4 +1,5 @@
 import {Review} from '../../types/Offers';
+import {MonthNames} from '../../const';
 
 type Setting = {
   review: Review
@@ -6,6 +7,10 @@ type Setting = {
 
 function ReviewCard(props: Setting) : JSX.Element {
   const {review} = props;
+  const date = new Date(review.date);
+  const month = MonthNames[date.getMonth()];
+  const year = date.getFullYear();
+  const reviewDate = `${month} ${year}` ;
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
@@ -26,7 +31,7 @@ function ReviewCard(props: Setting) : JSX.Element {
         <p className="reviews__text">
           {review.comment}
         </p>
-        <time className="reviews__time" dateTime="2019-04-24">{review.date}</time>
+        <time className="reviews__time" dateTime="2019-04-24">{reviewDate}</time>
       </div>
     </li>
   );

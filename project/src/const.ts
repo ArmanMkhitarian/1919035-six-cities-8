@@ -43,3 +43,5 @@ export enum APIRoute {
   Offer = '/hotels/',
   Comments = '/comments'
 }
+
+export const MonthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

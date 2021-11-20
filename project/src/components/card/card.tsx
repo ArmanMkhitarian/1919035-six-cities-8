@@ -17,6 +17,7 @@ function Card(props: Settings): JSX.Element {
   const history = useHistory();
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const {offer, onActive} = props;
+  offer.rating = Math.round(offer.rating);
   const handleClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
       browserHistory.push(AppRoute.Login);

@@ -46,7 +46,7 @@ function Offer(): JSX.Element {
 
   const mapPoints = [...nearbyOffers ?? []];
   mapPoints.push(currentOffer);
-
+  currentOffer.rating = Math.round(currentOffer.rating);
   const favoriteButtonStyle = currentOffer.isFavorite ? 'property__bookmark-button--active' : '';
   const handleClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
