@@ -19,7 +19,7 @@ function FavoritesCard(props: Settings): JSX.Element {
   return (
     <article className="favorites__card place-card">
       <div className="favorites__image-wrapper place-card__image-wrapper">
-        <img onClick={() => history.push(AppRoute.Offer.replace('id',offer.id.toString()))} className="place-card__image" src= {offer.previewImage} width="150" height="110" alt="Place image"/>
+        <img onClick={() => history.push(AppRoute.Offer.replace(':id',offer.id.toString()))} className="place-card__image" src= {offer.previewImage} width="150" height="110" alt="Place image"/>
       </div>
       <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">

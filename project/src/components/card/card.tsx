@@ -38,7 +38,7 @@ function Card(props: Settings): JSX.Element {
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
         <img
-          onClick={() => history.push(AppRoute.Offer.replace('id',offer.id.toString())) }
+          onClick={() => history.push(AppRoute.Offer.replace(':id',offer.id.toString())) }
           className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image"
         />
       </div>
@@ -60,7 +60,7 @@ function Card(props: Settings): JSX.Element {
           <span className="visually-hidden">Rating</span>
         </div>
         <h2 className="place-card__name">
-          <a href={AppRoute.Offer.replace('id',offer.id.toString())}>{offer.title} {offer.isFavorite}</a>
+          <a href={AppRoute.Offer.replace(':id',offer.id.toString())}>{offer.title} {offer.isFavorite}</a>
         </h2>
         <p className="place-card__type">{offer.cardType}</p>
       </div>
