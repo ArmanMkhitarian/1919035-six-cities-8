@@ -37,4 +37,5 @@ function ReviewList(props: Setting) : JSX.Element {
     );
   }
 }
+
 export default ReviewList;
