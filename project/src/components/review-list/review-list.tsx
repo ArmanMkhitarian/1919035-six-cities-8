@@ -8,13 +8,15 @@ type Setting = {
 
 function ReviewList(props: Setting) : JSX.Element {
   const {reviews} = props;
+  reviews?.sort((a,b)=> new Date(b.date).valueOf() - new Date(a.date).valueOf());
+
   if(reviews !== undefined) {
     return (
       <section className="property__reviews reviews">
         <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
         <ul className="reviews__list">
           {
-            reviews.map((review, id) => {
+            reviews.slice(0,10).map((review, id) => {
               const keyValue = `${id}-${review.user.name}`;
               return (
                 <div key={keyValue}>
