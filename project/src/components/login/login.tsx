@@ -1,7 +1,7 @@
-import {FormEvent, SyntheticEvent, useRef} from 'react';
+import {FormEvent, SyntheticEvent, useEffect, useRef} from 'react';
 import {AuthData} from '../../types/auth-data';
 import {loginAction} from '../../store/api-actions';
-import {useHistory, Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, cities} from '../../const';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAuthorizationStatus} from '../../store/user-data/selectors';
@@ -31,13 +31,21 @@ function Login(): JSX.Element {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (loginRef.current !== null && passwordRef.current !== null) {
-      onSubmit({
-        login: loginRef.current.value,
-        password: passwordRef.current.value,
-      });
-      history.push(AppRoute.Main);
+      const passwordReg = /(?=.*[a-zA-Z])(?=.*[0-9])/;
+      if(passwordReg.test(passwordRef.current.value)){
+        onSubmit({
+          login: loginRef.current.value,
+          password: passwordRef.current.value,
+        });
+      }
     }
   };
+
+  useEffect(() => {
+    if(authorizationStatus === AuthorizationStatus.Auth) {
+      history.push(AppRoute.Main);
+    }
+  }, [authorizationStatus]);
   return (
     <section>
       <div style = {{display: 'none'}}>
