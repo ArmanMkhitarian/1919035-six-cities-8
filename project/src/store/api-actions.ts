@@ -37,6 +37,7 @@ export const checkAuthAction = (): ThunkActionResult =>
       .then((response) => {
         if(response.data){
           dispatch(requireAuthorization(AuthorizationStatus.Auth));
+          dispatch(getCurrentLogin(response.data.email));
         } else {
           dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         }

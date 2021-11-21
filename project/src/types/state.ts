@@ -6,7 +6,7 @@ export type State = RootState;
 
 export type userData = {
   authorizationStatus: AuthorizationStatus,
-  currentLogin: string | null,
+  currentLogin: string,
 };
 
 export type offerData = {
