@@ -5,6 +5,7 @@ import {Actions, ActionType} from '../action';
 const initialState: userData = {
   authorizationStatus: AuthorizationStatus.Unknown,
   currentLogin: '',
+  avatarURL: '',
 };
 
 const userReducer = (state = initialState, action: Actions): userData => {
@@ -15,6 +16,8 @@ const userReducer = (state = initialState, action: Actions): userData => {
       return {...state, authorizationStatus: AuthorizationStatus.NoAuth};
     case ActionType.GetCurrentLogin:
       return {...state, currentLogin: action.payload};
+    case ActionType.GetAvatarURL:
+      return {...state, avatarURL: action.payload};
     default:
       return state;
   }

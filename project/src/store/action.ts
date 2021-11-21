@@ -20,6 +20,7 @@ enum ActionType {
   SetFavoriteOffer = 'data/setFavoriteOffer',
   PostDataStatus = 'data/dataStatus',
   UpdateOffer = 'data/updateOffer',
+  GetAvatarURL = 'user/getAvatarURL',
 }
 
 type UpdateOfferAction = {
@@ -91,6 +92,11 @@ type PostDataStatusAction = {
   payload: DataStatus,
 }
 
+type GetAvatarURLAction = {
+  type: ActionType.GetAvatarURL,
+  payload: string,
+}
+
 export const updateOffer = (offer: Offer) : UpdateOfferAction => ({
   type: ActionType.UpdateOffer,
   payload: offer,
@@ -123,6 +129,11 @@ export const requireLogout = () : RequireLogout => ({
 export const getCurrentLogin = (currentLogin: string) : GetCurrentLogin => ({
   type: ActionType.GetCurrentLogin,
   payload: currentLogin,
+});
+
+export const getAvatarUrl = (avatarURL: string) : GetAvatarURLAction => ({
+  type: ActionType.GetAvatarURL,
+  payload: avatarURL,
 });
 
 export const getCurrentOffer = (currentOffer: Offer) : GetCurrentOffer => ({
@@ -160,7 +171,7 @@ export const postDataStatusAction = (dataStatus: DataStatus) : PostDataStatusAct
   payload: dataStatus,
 });
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction | PostDataStatusAction | UpdateOfferAction;
+type Actions = GetAvatarURLAction| SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction | PostDataStatusAction | UpdateOfferAction;
 
 export {ActionType};
 

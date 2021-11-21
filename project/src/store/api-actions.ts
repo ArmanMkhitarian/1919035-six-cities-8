@@ -11,11 +11,11 @@ import {
   requireLogout,
   setFavoritesOffers,
   updateOffer,
-  ThunkActionResult
+  ThunkActionResult, getAvatarUrl
 } from './action';
 
 import {APIRoute, AppRoute, AuthorizationStatus, DataStatus, ERROR_MESSAGE} from '../const';
-import {adaptToClient, adaptToReview, CommentPost, Offer, Reviews} from '../types/Offers';
+import {adaptToClient, adaptToReview, adaptToUser, CommentPost, Offer, Reviews} from '../types/Offers';
 import {dropToken, saveToken, Token} from '../services/token';
 import {AuthData} from '../types/auth-data';
 import {toast} from 'react-toastify';
@@ -38,6 +38,7 @@ export const checkAuthAction = (): ThunkActionResult =>
         if(response.data){
           dispatch(requireAuthorization(AuthorizationStatus.Auth));
           dispatch(getCurrentLogin(response.data.email));
+          dispatch(getAvatarUrl(adaptToUser(response.data).avatarUrl));
         } else {
           dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         }

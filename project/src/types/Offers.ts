@@ -44,6 +44,24 @@ export type CommentPost = {
   rating: number;
 }
 
+export type UserService = {
+  avatarUrl: string,
+  email: string,
+  id: string,
+  isPro: boolean,
+  name: string,
+  token: string,
+}
+
+export const adaptToUser = (data: any): UserService => ({
+  avatarUrl: data['avatar_url'],
+  email: data['email'],
+  id: data['id'],
+  isPro: data['is_pro'],
+  name: data['name'],
+  token: data['token'],
+});
+
 export const adaptToReview = (data: any): Review => ({
   comment: data['comment'],
   date: data['date'],
@@ -56,6 +74,7 @@ export const adaptToReview = (data: any): Review => ({
     name: data['user']['name'],
   },
 });
+
 
 export const adaptToClient = (data: any): Offer => ({
   city: {

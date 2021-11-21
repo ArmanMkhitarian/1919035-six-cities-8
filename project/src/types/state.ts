@@ -7,6 +7,7 @@ export type State = RootState;
 export type userData = {
   authorizationStatus: AuthorizationStatus,
   currentLogin: string,
+  avatarURL: string,
 };
 
 export type offerData = {
