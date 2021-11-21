@@ -15,7 +15,7 @@ function ImagesList(props: OfferGalleryProps): JSX.Element {
           <div className="property__image-wrapper" key={getRandomId()}>
             <img className="property__image" src={image} alt="Фото"/>
           </div>
-        ))};
+        ))}
       </div>
     </div>
   );

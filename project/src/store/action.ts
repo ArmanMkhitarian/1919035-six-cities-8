@@ -18,8 +18,14 @@ enum ActionType {
   GetReviews = 'data/getReviews',
   PostReview = 'data/postReview',
   SetFavoriteOffer = 'data/setFavoriteOffer',
-  PostDataStatus = 'data/dataStatus'
+  PostDataStatus = 'data/dataStatus',
+  UpdateOffer = 'data/updateOffer',
 }
+
+type UpdateOfferAction = {
+  type: ActionType.UpdateOffer;
+  payload: Offer;
+};
 
 type SwitchCityAction = {
   type: ActionType.SwitchCity;
@@ -85,6 +91,11 @@ type PostDataStatusAction = {
   payload: DataStatus,
 }
 
+export const updateOffer = (offer: Offer) : UpdateOfferAction => ({
+  type: ActionType.UpdateOffer,
+  payload: offer,
+});
+
 export const changeCity = (city: string) : SwitchCityAction => ({
   type: ActionType.SwitchCity,
   payload: city,
@@ -149,7 +160,7 @@ export const postDataStatusAction = (dataStatus: DataStatus) : PostDataStatusAct
   payload: dataStatus,
 });
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction | PostDataStatusAction;
+type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction | PostDataStatusAction | UpdateOfferAction;
 
 export {ActionType};
 

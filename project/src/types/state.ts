@@ -23,4 +23,5 @@ export type offersData = {
   favoritesOffer: Offers,
   postReview: CommentPost,
   postDataStatus: DataStatus,
+  updateOffer: Offer,
 };

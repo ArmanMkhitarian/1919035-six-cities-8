@@ -10,6 +10,7 @@ import {
   requireAuthorization,
   requireLogout,
   setFavoritesOffers,
+  updateOffer,
   ThunkActionResult
 } from './action';
 
@@ -124,8 +125,7 @@ export const sendFavoriteOffer = (id: string, isFavorite: boolean): ThunkActionR
     const status = isFavorite ? 0 : 1;
     await api.post(`${APIRoute.Favorite}/${id}/${status}`)
       .then((response) => {
-        dispatch(fetchOffersAction());
-        dispatch(getFavoriteOffers());
+        dispatch(updateOffer(adaptToClient(response.data)));
       })
       .catch(() => {
         toast.error(ERROR_MESSAGE);

@@ -17,9 +17,9 @@ export enum AuthorizationStatus {
 }
 
 export enum NameSpace {
-  offers = 'offers',
-  offer = 'offer',
-  user = 'user',
+  Offers = 'offers',
+  Offer = 'offer',
+  User = 'user',
 }
 
 export enum DataStatus {
