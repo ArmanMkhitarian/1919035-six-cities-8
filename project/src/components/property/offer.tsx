@@ -47,15 +47,16 @@ function Offer(): JSX.Element {
   const mapPoints = [...nearbyOffers ?? []];
   mapPoints.push(currentOffer);
   currentOffer.rating = Math.round(currentOffer.rating);
-  const favoriteButtonStyle = currentOffer.isFavorite ? 'property__bookmark-button--active' : '';
   const handleClick = () => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
       browserHistory.push(AppRoute.Login);
     }
     else {
+      currentOffer.isFavorite = !currentOffer.isFavorite;
       dispatch(sendFavoriteOffer(currentOffer.id, currentOffer.isFavorite));
     }
   };
+
   return (
     <div>
       <div style={{display: 'none'}}>
@@ -92,7 +93,7 @@ function Offer(): JSX.Element {
                   <h1 className="property__name">
                     {currentOffer?.title}
                   </h1>
-                  <button className={`property__bookmark-button ${favoriteButtonStyle} button`} type="button" onClick={handleClick}>
+                  <button className={`property__bookmark-button ${currentOffer.isFavorite ? 'property__bookmark-button--active' : ''} button`} type="button" onClick={handleClick}>
                     <svg className="property__bookmark-icon" width="31" height="33">
                       <use xlinkHref="#icon-bookmark"></use>
                     </svg>
