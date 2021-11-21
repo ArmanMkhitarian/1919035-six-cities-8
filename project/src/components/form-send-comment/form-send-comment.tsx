@@ -1,15 +1,22 @@
-import React, {FormEvent} from 'react';
+import React, {FormEvent, useEffect} from 'react';
 import {CommentPost} from '../../types/Offers';
 import {postCommentAction} from '../../store/api-actions';
 import {getCurrentOffer} from '../../store/offer-data/selectors';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {postDataStatus, postReview} from '../../store/offers-data/selectors';
+import {DataStatus} from '../../const';
+import {postDataStatusAction} from '../../store/action';
 
 
 function FormSendComment(): JSX.Element {
   const dispatch = useDispatch();
+  let isCommentSending = false;
   const currentOffer = useSelector(getCurrentOffer);
+  const postReviewState = useSelector(postReview);
+  const dataStatus = useSelector(postDataStatus);
   const onSetComment = (newComment: CommentPost) => {
     dispatch(postCommentAction(newComment));
+    isCommentSending = true;
   };
   const [commentText,setCommentText] = React.useState('');
   const [ratingValue,setRatingValue] = React.useState(0);
@@ -18,10 +25,19 @@ function FormSendComment(): JSX.Element {
     evt.preventDefault();
     if (commentText !== null && ratingValue !== null) {
       onSetComment({offerId: currentOffer.id, comment: commentText, rating: ratingValue});
-      setCommentText('');
-      setRatingValue(0);
+      if(postReviewState.offerId === currentOffer.id){
+        isCommentSending = false;
+      }
     }
   };
+
+  useEffect(() => {
+    if (dataStatus === DataStatus.IsSended) {
+      setCommentText('');
+      setRatingValue(0);
+      dispatch(postDataStatusAction(DataStatus.Default));
+    }
+  }, [dataStatus]);
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={onSubmitHandle}>
@@ -68,6 +84,7 @@ function FormSendComment(): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={commentText}
+        disabled = {isCommentSending}
       >
       </textarea>
       <div className="reviews__button-wrapper">
@@ -75,7 +92,12 @@ function FormSendComment(): JSX.Element {
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay
           with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={false}>Submit</button>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={commentText.length < 50 || ratingValue === 0 || isCommentSending}
+        >Submit
+        </button>
       </div>
     </form>
   );

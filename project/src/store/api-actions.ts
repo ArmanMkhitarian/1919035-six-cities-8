@@ -1,20 +1,33 @@
 import {
-  getCurrentLogin, getCurrentOffer, getNearbyOffers, getReviews,
-  offersLoad, postReviewAction, redirectToRouter,
+  getCurrentLogin,
+  getCurrentOffer,
+  getNearbyOffers,
+  getReviews,
+  offersLoad,
+  postDataStatusAction,
+  postReviewAction,
+  redirectToRouter,
   requireAuthorization,
-  requireLogout, setFavoritesOffers,
+  requireLogout,
+  setFavoritesOffers,
   ThunkActionResult
 } from './action';
 
-import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
+import {APIRoute, AppRoute, AuthorizationStatus, DataStatus, ERROR_MESSAGE} from '../const';
 import {adaptToClient, adaptToReview, CommentPost, Offer, Reviews} from '../types/Offers';
 import {dropToken, saveToken, Token} from '../services/token';
 import {AuthData} from '../types/auth-data';
+import {toast} from 'react-toastify';
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Offer[]>(APIRoute.Offers);
-    dispatch(offersLoad(data.map((item: unknown) => adaptToClient(item))));
+    await api.get<Offer[]>(APIRoute.Offers)
+      .then((response) => {
+        dispatch(offersLoad(response.data.map((item: unknown) => adaptToClient(item))));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 
 export const checkAuthAction = (): ThunkActionResult =>
@@ -26,23 +39,36 @@ export const checkAuthAction = (): ThunkActionResult =>
         } else {
           dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
         }
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
       });
   };
 
 export const loginAction = ({login: email, password}: AuthData): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    const {data: {token}} = await api.post<{token: Token}>(APIRoute.Login, {email, password});
-    saveToken(token);
-    dispatch(getCurrentLogin(email));
-    dispatch(requireAuthorization(AuthorizationStatus.Auth));
+    await api.post<{token: Token}>(APIRoute.Login, {email, password})
+      .then((response) => {
+        saveToken(response.data.token);
+        dispatch(getCurrentLogin(email));
+        dispatch(requireAuthorization(AuthorizationStatus.Auth));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 
 export const logoutAction = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    api.delete(APIRoute.Logout);
-    dropToken();
-    dispatch(requireLogout());
-    dispatch(getCurrentLogin(''));
+    try {
+      api.delete(APIRoute.Logout);
+      dropToken();
+      dispatch(requireLogout());
+      dispatch(getCurrentLogin(''));
+    }
+    catch {
+      toast.error(ERROR_MESSAGE);
+    }
   };
 
 export const fetchOfferAction = (id: string): ThunkActionResult =>
@@ -58,35 +84,62 @@ export const fetchOfferAction = (id: string): ThunkActionResult =>
 
 export const fetchNearByOffersAction = (id:string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const { data } = await api.get<Offer[]>(`${APIRoute.Offers}/${id.replace(':', '').trim()}/nearby`);
-    dispatch(getNearbyOffers(data.map((item: unknown) => adaptToClient(item))));
+    await api.get<Offer[]>(`${APIRoute.Offers}/${id.replace(':', '').trim()}/nearby`)
+      .then((response) => {
+        dispatch(getNearbyOffers(response.data.map((item: unknown) => adaptToClient(item))));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 
 export const fetchCommentsAction = (id:string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const { data } = await api.get<Reviews>(`${APIRoute.Comments}/${id.replace(':', '').trim()}`);
-    dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
+    await api.get<Reviews>(`${APIRoute.Comments}/${id.replace(':', '').trim()}`)
+      .then((response) => {
+        dispatch(getReviews(response.data.map((item: unknown) => adaptToReview(item))));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 
 export const postCommentAction = ({offerId, comment, rating}:CommentPost): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    const {data} = await api.post<Reviews>(`${APIRoute.Comments}/${offerId}`, { comment, rating });
-    dispatch(postReviewAction({ offerId, comment, rating }));
-    dispatch(getReviews(data.map((item: unknown) => adaptToReview(item))));
+    await api.post<Reviews>(`${APIRoute.Comments}/${offerId}`, { comment, rating })
+      .then((response) => {
+        dispatch(postReviewAction({ offerId, comment, rating }));
+        dispatch(postDataStatusAction(DataStatus.IsSended));
+        dispatch(getReviews(response.data.map((item: unknown) => adaptToReview(item))));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+        dispatch(postDataStatusAction(DataStatus.NotSended));
+      });
   };
 
 
 export const sendFavoriteOffer = (id: string, isFavorite: boolean): ThunkActionResult =>
   async (dispatch, _getState, api) => {
     const status = isFavorite ? 0 : 1;
-    await api.post(`${APIRoute.Favorite}/${id}/${status}`);
-    dispatch(fetchOffersAction());
-    dispatch(getFavoriteOffers());
+    await api.post(`${APIRoute.Favorite}/${id}/${status}`)
+      .then((response) => {
+        dispatch(fetchOffersAction());
+        dispatch(getFavoriteOffers());
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 
 export const getFavoriteOffers = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    const { data } = await api.get(APIRoute.Favorite);
-    dispatch(setFavoritesOffers(data.map((item: unknown) => adaptToClient(item))));
+    await api.get(APIRoute.Favorite)
+      .then((response) => {
+        dispatch(setFavoritesOffers(response.data.map((item: unknown) => adaptToClient(item))));
+      })
+      .catch(() => {
+        toast.error(ERROR_MESSAGE);
+      });
   };
 

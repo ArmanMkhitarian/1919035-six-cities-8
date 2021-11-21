@@ -22,6 +22,12 @@ export enum NameSpace {
   user = 'user',
 }
 
+export enum DataStatus {
+  IsSended ='IS_SENDED',
+  NotSended ='NOT_SENDED',
+  Default = 'DEFAULT',
+}
+
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
 
 export const URL_MARKER_CURRENT = 'img/pin-active.svg';
@@ -44,4 +50,5 @@ export enum APIRoute {
   Comments = '/comments'
 }
 
+export const ERROR_MESSAGE = 'Ошибка';
 export const MonthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

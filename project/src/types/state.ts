@@ -1,5 +1,5 @@
-import {Offer, Offers, Reviews} from './Offers';
-import {AuthorizationStatus, SortType} from '../const';
+import {CommentPost, Offer, Offers, Reviews} from './Offers';
+import {AuthorizationStatus, DataStatus, SortType} from '../const';
 import {RootState} from '../store/root-reducer';
 
 export type State = RootState;
@@ -21,4 +21,6 @@ export type offersData = {
   currentSortType: SortType;
   isDataLoaded: boolean,
   favoritesOffer: Offers,
+  postReview: CommentPost,
+  postDataStatus: DataStatus,
 };

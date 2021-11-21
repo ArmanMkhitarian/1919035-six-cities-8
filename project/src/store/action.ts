@@ -1,4 +1,4 @@
-import {AuthorizationStatus, SortType} from '../const';
+import {AuthorizationStatus, DataStatus, SortType} from '../const';
 import {ThunkAction, ThunkDispatch} from '@reduxjs/toolkit';
 import {AxiosInstance} from 'axios';
 import {State} from '../types/state';
@@ -17,7 +17,8 @@ enum ActionType {
   GetNearbyOffers = 'data/getNearbyOffers',
   GetReviews = 'data/getReviews',
   PostReview = 'data/postReview',
-  SetFavoriteOffer = 'data/setFavoriteOffer'
+  SetFavoriteOffer = 'data/setFavoriteOffer',
+  PostDataStatus = 'data/dataStatus'
 }
 
 type SwitchCityAction = {
@@ -79,6 +80,11 @@ type SetFavoriteOfferAction = {
   payload: Offers
 }
 
+type PostDataStatusAction = {
+  type: ActionType.PostDataStatus,
+  payload: DataStatus,
+}
+
 export const changeCity = (city: string) : SwitchCityAction => ({
   type: ActionType.SwitchCity,
   payload: city,
@@ -138,7 +144,12 @@ export const setFavoritesOffers = (offers: Offers) : SetFavoriteOfferAction => (
   payload: offers,
 });
 
-type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction;
+export const postDataStatusAction = (dataStatus: DataStatus) : PostDataStatusAction => ({
+  type: ActionType.PostDataStatus,
+  payload: dataStatus,
+});
+
+type Actions = SwitchCityAction | SwitchSortAction | RequireAuthorization | RequireLogout | OffersLoad | GetCurrentLogin | GetCurrentOffer | RedirectToRoute | GetNearbyOffersAction | GetReviewsAction | PostReviewAction | SetFavoriteOfferAction | PostDataStatusAction;
 
 export {ActionType};
 

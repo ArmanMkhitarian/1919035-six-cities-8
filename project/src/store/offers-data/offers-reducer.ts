@@ -1,6 +1,6 @@
 import {offersData} from '../../types/state';
 import {Actions, ActionType} from '../action';
-import {SortType} from '../../const';
+import {DataStatus, SortType} from '../../const';
 
 const initialState: offersData = {
   currentCity: 'Paris',
@@ -8,6 +8,8 @@ const initialState: offersData = {
   currentSortType: SortType.Popular,
   isDataLoaded: false,
   favoritesOffer: [],
+  postReview: {offerId: '', comment: '', rating: 0},
+  postDataStatus: DataStatus.Default,
 };
 
 const offersReducer = (state = initialState, action: Actions): offersData => {
@@ -20,6 +22,10 @@ const offersReducer = (state = initialState, action: Actions): offersData => {
       return {...state, offers: action.payload, isDataLoaded: true};
     case ActionType.SetFavoriteOffer:
       return {...state, favoritesOffer: action.payload};
+    case ActionType.PostReview:
+      return {...state, postReview: action.payload};
+    case ActionType.PostDataStatus:
+      return {...state, postDataStatus: action.payload};
     default:
       return state;
   }
