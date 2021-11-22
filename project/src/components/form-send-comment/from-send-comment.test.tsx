@@ -4,11 +4,12 @@ import {createMemoryHistory} from 'history';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import FormSendComment from './form-send-comment';
-import {getOfferDataMock} from '../../services/mocks';
+import {getOfferDataMock, getOffersDataMock} from '../../services/mocks';
 
 const mockStore = configureMockStore();
 const store = mockStore({
   offer: getOfferDataMock,
+  offers: getOffersDataMock,
 });
 
 describe('Component: FormSendComment', () => {

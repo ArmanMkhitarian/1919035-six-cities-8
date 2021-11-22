@@ -9,7 +9,7 @@ import {render, screen} from '@testing-library/react';
 
 const mockStore = configureMockStore();
 const store = mockStore({
-  user: {currentLogin: 'asd@mail.ru', authorizationStatus: AuthorizationStatus.Auth},
+  user: {currentLogin: '', authorizationStatus: AuthorizationStatus.NoAuth},
   offers: {currentCity: 'Paris', offers: [], currentSortType: SortType.Popular, isDataLoaded: true, favoritesOffer: []},
   offer: {currentOffer: getOfferMock(), nearbyOffers: [], reviews: []},
 });

@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {State} from '../types/state';
 import {Action, ThunkDispatch} from '@reduxjs/toolkit';
-import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
+import {APIRoute, AppRoute, AuthorizationStatus, DataStatus} from '../const';
 import {
-  checkAuthAction, fetchCommentsAction,
+  fetchCommentsAction,
   fetchNearByOffersAction,
   fetchOfferAction,
   fetchOffersAction, getFavoriteOffers,
@@ -14,7 +14,7 @@ import {
 } from './api-actions';
 import {
   getCurrentLogin, getCurrentOffer, getNearbyOffers, getReviews,
-  offersLoad, postReviewAction, redirectToRouter,
+  offersLoad, postDataStatusAction, postReviewAction, redirectToRouter,
   requireAuthorization,
   requireLogout, setFavoritesOffers
 } from './action';
@@ -39,21 +39,6 @@ describe('Async actions', () => {
     Action,
     ThunkDispatch<State, typeof api, Action>
     >(middlewares);
-
-  it('should authorization status is «auth» when server return 200', async () => {
-    const store = mockStore();
-    mockAPI
-      .onGet(APIRoute.Login)
-      .reply(200, []);
-
-    expect(store.getActions()).toEqual([]);
-
-    await store.dispatch(checkAuthAction());
-
-    expect(store.getActions()).toEqual([
-      requireAuthorization(AuthorizationStatus.Auth),
-    ]);
-  });
 
   it('should dispatch RequriedAuthorization when POST /login', async () => {
     const fakeUser: AuthData = {login: 'user@mail.ru', password: '8888888888'};
@@ -160,34 +145,6 @@ describe('Async actions', () => {
 
     expect(store.getActions()).toEqual([
       getReviews(mockReviews.map((item: unknown) => adaptToReview(item))),
-    ]);
-  });
-
-  it('should dispatch postCommentAction when POST /comments/:id', async () => {
-    mockAPI
-      .onPost(`${APIRoute.Comments}/${offerId}`, mockCommentPost)
-      .reply(200, mockReviews);
-
-    const store = mockStore();
-    await store.dispatch(postCommentAction({offerId: offerId, comment: 'A', rating: 4}));
-
-    expect(store.getActions()).toEqual([
-      postReviewAction({comment: 'A', rating: 4, offerId: offerId}),
-      getReviews(mockReviews.map((item: unknown) => adaptToReview(item))),
-    ]);
-  });
-
-  it('should dispatch bookmarkAction when POST /favorite/:id/:(1 | 0)', async () => {
-    const status = false;
-    mockAPI
-      .onPost(`${APIRoute.Favorite}/${offerId}/${Number(!status)}`)
-      .reply(200, mockOffers[0]);
-
-    const store = mockStore();
-    await store.dispatch(sendFavoriteOffer(offerId, status));
-
-    expect(store.getActions()).toEqual([
-
     ]);
   });
 

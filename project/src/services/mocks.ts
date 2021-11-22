@@ -1,4 +1,4 @@
-import {Offer, Offers, Review} from '../types/Offers';
+import {CommentPost, Offer, Offers, Review} from '../types/Offers';
 import {AuthorizationStatus, SortType} from '../const';
 
 
@@ -104,6 +104,7 @@ export const getOffersDataMock = {
   currentSortType: SortType.Popular,
   isDataLoaded: true,
   favoritesOffer: [],
+  postReview: {} as CommentPost,
 };
 
 export const getUserData = {
