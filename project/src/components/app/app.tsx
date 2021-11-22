@@ -11,7 +11,12 @@ import React from 'react';
 import {cities} from '../../const';
 import {Offers} from '../../types/Offers';
 import Loading from '../loading/loading';
-import {getCurrentCity, getCurrentSortType, getDataLoaded, getOffers} from '../../store/offers-data/selectors';
+import {
+  getCurrentCity,
+  getCurrentSortType,
+  getDataLoaded,
+  getOffersInSelectedCity
+} from '../../store/offers-data/selectors';
 import {useSelector} from 'react-redux';
 
 
@@ -35,11 +40,9 @@ const getOffersSorted = (currentSortType: string, offers: Offers) => {
 
 function App(): JSX.Element {
   const currentCity = useSelector(getCurrentCity);
-  const offers = useSelector(getOffers);
   const currentSortType = useSelector(getCurrentSortType);
   const isDataLoaded = useSelector(getDataLoaded);
-
-  const offersFilter = offers.filter((offer) => offer.city.name === currentCity);
+  const offersFilter = useSelector(getOffersInSelectedCity(currentCity));
   const offersSorted = getOffersSorted(currentSortType, offersFilter);
   if (!isDataLoaded) {
     return (

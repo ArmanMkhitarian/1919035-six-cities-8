@@ -1,3 +1,5 @@
+import {State} from './state';
+
 export type City = {
   location: {
     latitude: number;
@@ -7,3 +9,4 @@ export type City = {
   name: string;
 };
 
+export type ReselectType<S> = (state: State) => S;
