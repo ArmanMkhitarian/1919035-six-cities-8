@@ -1,6 +1,6 @@
 import {Offer} from '../../types/Offers';
 import {useHistory} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {AppRoute, AuthorizationStatus, getOfferTypeString} from '../../const';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getAuthorizationStatus} from '../../store/user-data/selectors';
@@ -63,7 +63,7 @@ function Card(props: Settings): JSX.Element {
         <h2 className="place-card__name">
           <a href={AppRoute.Offer.replace(':id',offer.id.toString())}>{offer.title} {offer.isFavorite}</a>
         </h2>
-        <p className="place-card__type">{offer.cardType}</p>
+        <p className="place-card__type">{getOfferTypeString(offer.cardType)}</p>
       </div>
     </article>
   );

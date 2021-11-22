@@ -32,6 +32,8 @@ export const URL_MARKER_DEFAULT = 'img/pin.svg';
 
 export const URL_MARKER_CURRENT = 'img/pin-active.svg';
 
+export const MAX_COMMENTS = 10;
+
 export const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 export enum SortType {
@@ -52,3 +54,20 @@ export enum APIRoute {
 
 export const ERROR_MESSAGE = 'Ошибка';
 export const MonthNames: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+export const getOfferTypeString = (type: string): string => {
+  switch (type) {
+    case 'apartment':
+      return 'Apartment';
+    case 'room':
+      return 'Private room';
+    case 'house':
+      return 'House';
+    case 'hotel':
+      return 'Hotel';
+    default:
+      return 'Unknown';
+  }
+};
+
+

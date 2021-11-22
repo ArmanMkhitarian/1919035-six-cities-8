@@ -18,7 +18,7 @@ function Login(): JSX.Element {
     dispatch(loginAction(authData));
   };
 
-  const onHandlerCity = (e: SyntheticEvent) => {
+  const handleClick = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(changeCity(currentCity));
     browserHistory.push(AppRoute.Root);
@@ -115,7 +115,7 @@ function Login(): JSX.Element {
             </section>
             <section className="locations locations--login locations--current">
               <div className="locations__item">
-                <Link className="locations__item-link" to='#' onClick={onHandlerCity}>
+                <Link className="locations__item-link" to='#' onClick={handleClick}>
                   <span>{currentCity}</span>
                 </Link>
               </div>

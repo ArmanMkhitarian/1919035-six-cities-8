@@ -1,6 +1,7 @@
 import ReviewCard from '../review/review';
 import {Reviews} from '../../types/Offers';
 import React from 'react';
+import {MAX_COMMENTS} from '../../const';
 
 type Setting = {
   reviews: Reviews | undefined,
@@ -16,7 +17,7 @@ function ReviewList(props: Setting) : JSX.Element {
         <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
         <ul className="reviews__list">
           {
-            reviews.slice(0,10).map((review, id) => {
+            reviews.slice(0,MAX_COMMENTS).map((review, id) => {
               const keyValue = `${id}-${review.user.name}`;
               return (
                 <div key={keyValue}>
